@@ -1,21 +1,42 @@
-<!DOCTYPE html>
+<!doctype html>
+
 <html lang="en">
+
 <head>
+
 <meta charset="utf-8">
-<title>Loading a Portion of External Page using Ajax in jQuery</title>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script>
-$(document).ready(function(){
-    $("button").click(function(){
-        $("#box").load(" https://ekisan.net/narsinghpur-mandi-bhav/ article div table");
-    });
-});
-</script>
+
+<title>load demo</title>
+
+<style>
+
+body {
+
+font-size: 12px;
+
+font-family: Arial;
+
+}
+
+</style>
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
 </head>
+
 <body>
-    <div id="box">
-        <h2>Click button to load new content inside DIV box</h2>
-    </div>
-    <button type="button">Load Content</button>
+
+<b>Projects:</b>
+
+<ol id="new-projects"></ol>
+
+<script>
+
+$( "#new-projects" ).load( "https://api.jquery.com/resources/load.html #projects li" );
+
+</script>
+
 </body>
+
 </html>
+
