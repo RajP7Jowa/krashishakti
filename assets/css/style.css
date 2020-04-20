@@ -83,7 +83,7 @@ h1, h2, h3, h4, h5, h6 {
 --------------------------------------------------------------*/
 #header {
   top: 50px;
-  height: 70px;
+  height: 40px;
   z-index: 997;
   transition: all 0.5s;
   padding: 10px 0;
@@ -94,23 +94,11 @@ h1, h2, h3, h4, h5, h6 {
   background: rgba(26, 24, 22, 0.85);
 }
 
-#header .logo h1 {
-  font-size: 28px;
-  margin: 0;
-  line-height: 1;
-  font-weight: 400;
-  letter-spacing: 3px;
-}
-
-#header .logo h1 a, #header .logo h1 a:hover {
-  color: #fff;
-  text-decoration: none;
-}
 
 #header .logo img {
   padding: 0;
   margin: 0;
-  max-height: 40px;
+  max-height: 37px;
 }
 
 @media (max-width: 992px) {
