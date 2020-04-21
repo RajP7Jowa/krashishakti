@@ -23,7 +23,7 @@ a:hover {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: "Satisfy", sans-serif;
+  font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -1507,11 +1507,6 @@ section {
   font-size: 8px;
   font-style: italic;
   padding: 0;
-  margin: 0 0 20px 0;
-}
-
-#footer .social-links {
-  margin: 0 0 10px 0;
 }
 
 #footer .social-links a {
@@ -1542,8 +1537,4 @@ section {
 .accordion .card-header.collapsed:after {
     /* symbol for "collapsed" panels */
     content: "\ea6e"; 
-}
-	
-.simple_lang{
-	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
