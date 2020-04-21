@@ -32,8 +32,8 @@ h1, h2, h3, h4, h5, h6 {
 .back-to-top {
   position: fixed;
   display: none;
-  right: 15px;
-  bottom: 15px;
+  right: 13px;
+  bottom: 13px;
   z-index: 99999;
 }
 
@@ -1491,7 +1491,7 @@ section {
   color: #fff;
   font-size: 8px;
   text-align: center;
-  padding-top: 20px;
+  padding: 20px 0px 13px 0px;
 }
 
 #footer h3 {
@@ -1500,7 +1500,9 @@ section {
   position: relative;
   padding: 0;
   margin: 0 0 8px 0;
+  text-align: justify;  text-justify: inter-word;
 }
+
 
 #footer p {
   font-size: 8px;
