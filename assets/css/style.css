@@ -1491,7 +1491,7 @@ section {
   color: #fff;
   font-size: 8px;
   text-align: center;
-  padding: 20px 0;
+  padding-top: 20px;
 }
 
 #footer h3 {
@@ -1499,7 +1499,7 @@ section {
   color: #ffb03b;
   position: relative;
   padding: 0;
-  margin: 0 0 10px 0;
+  margin: 0 0 8px 0;
 }
 
 #footer p {
