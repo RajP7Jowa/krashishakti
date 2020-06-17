@@ -2,7 +2,7 @@
 <!--
 <?php
 // Add correct path to your countlog.txt file.
-$path = 'countlog.txt';
+$path = 'clog.txt';
 
 // Opens countlog.txt to read the number of hits.
 $file  = fopen($path, 'r');
@@ -19,109 +19,112 @@ fclose($file);
 ?>
 -->
 <html lang="en">
+
 <head>
 	<meta charset="utf-8">
 	<meta content="width=device-width, initial-scale=1.0" name="viewport">
 	<title>कृषिशक्ति KrashiShakti</title>
-	  <meta name="description" content="फसल उपार्जन किसानों को भेजे गये SMS की जानकारी, परिवार सूची लॉकडॉन में निःशुल्क खाद्यान्न, रवी विपणन उपार्जन केंद्र, दैनिक मंडी भाव, कोरोना बचाव के तरीके, कोरोना जिलेवार मामले, किसान समाचार">
-	  <meta name="keywords" content="कृषिशक्ति, krashishakti, नरसिंहपुर, मध्यप्रदेश, किसान,  कोरोना, COVID 19, Corona,बचाव, रवी, फसल, विपणन,उपार्जन केंद्र,मंडी भाव, किसान समाचार,राशन, खाद्यान्न,  उपर्जन केंद्र, फसल विक्रय, SMS">
-	  <meta name="author" content="Raj Parihar">
+	<meta name="description" content="फसल उपार्जन किसानों को भेजे गये SMS की जानकारी, परिवार सूची लॉकडॉन में निःशुल्क खाद्यान्न, रवी विपणन उपार्जन केंद्र, दैनिक मंडी भाव, कोरोना बचाव के तरीके, कोरोना जिलेवार मामले, किसान समाचार">
+	<meta name="keywords" content="कृषिशक्ति, krashishakti, नरसिंहपुर, मध्यप्रदेश, किसान,  कोरोना, COVID 19, Corona,बचाव, रवी, फसल, विपणन,उपार्जन केंद्र,मंडी भाव, किसान समाचार,राशन, खाद्यान्न,  उपर्जन केंद्र, फसल विक्रय, SMS">
+	<meta name="author" content="Raj Parihar">
 	<!-- Favicons -->
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/img/favicon.png" rel="icon">
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
+	<link href="assets/img/favicon.png" rel="icon">
+	<link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 	<!-- Google Fonts -->
 	<link href="https://fonts.googleapis.com/css?family=Poppins:300,300i,400,400i,600,600i,700,700i|Satisfy|Comic+Neue:300,300i,400,400i,700,700i" rel="stylesheet">
 	<!-- Vendor CSS Files -->
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/vendor/icofont/icofont.min.css" rel="stylesheet">
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/vendor/venobox/venobox.css" rel="stylesheet">
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+	<link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="assets/vendor/icofont/icofont.min.css" rel="stylesheet">
+	<link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+	<link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+	<link href="assets/vendor/venobox/venobox.css" rel="stylesheet">
+	<link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
 	<!-- Template Main CSS File -->
-	<link href="https://rajp7jowa.github.io/krashishakti/assets/css/style.css" rel="stylesheet">
+	<link href="assets/css/style.css" rel="stylesheet">
 </head>
+<style>
+	a[href="https://www.freewebhostingarea.com"] {
+		display:none
+	}
+</style>
 
 <body>
-
-  <!-- ======= Header ======= -->
-  <header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex align-items-center">
-
-      <div class="logo mr-auto">
-			<a  href="#" class="p-0"><img src="https://rajp7jowa.github.io/krashishakti/assets/img/favicon.png" alt="" class="img-fluid"><strong class="heading pl-1"> कृषि शक्ति</strong></a>
+	<!-- ======= Header ======= -->
+	<header id="header" class="fixed-top d-flex align-items-center">
+		<div class="container d-flex align-items-center">
+			<div class="logo mr-auto">
+				<a href="#" class="p-0">
+					<img src="img/favicon.png" alt="" class="img-fluid"><strong class="heading pl-1"> कृषि शक्ति</strong>
+				</a>
+			</div>
+			<nav class="nav-menu d-none d-lg-block">
+				<ul>
+					<li><a href="#specials"><i class='bx bxs-hand-right'></i> परिवार सूची जिनके पास पात्रता पर्ची नही है, उनको COVID19 लॉकडॉन का एक माह का निःशुल्क विशेष खाद्यान्न दिया जाएगा </a>
+					</li>
+					<li><a href="#agricenter"><i class='bx bxs-hand-right'></i> रवी फसल विपणन वर्ष 2020 अतिरिक्त उपार्जन केंद्र सूची </a>
+					</li>
+					<li><a href="#mandibhavmp"><i class='bx bxs-hand-right'></i> मध्यप्रदेश दैनिक मंडी भाव की जानकारी </a>
+					</li>
+					<li><a href="#menu"><i class='bx bxs-hand-right'></i> जिले-वार कोरोना मामलों की जानकारी </a>
+					</li>
+					<li><a href="#about"><i class='bx bxs-hand-right'></i> कोरोना से बचाव के तरीके </a>
+					</li>
+				</ul>
+			</nav>
+			<!-- .nav-menu -->
 		</div>
-
-      <nav class="nav-menu d-none d-lg-block">
-        <ul>
-          <li><a href="#specials"><i class='bx bxs-hand-right'></i> परिवार सूची जिनके पास पात्रता पर्ची नही है, उनको COVID19 लॉकडॉन का एक माह का निःशुल्क विशेष खाद्यान्न दिया जाएगा </a></li>
-			<li><a href="#why-us"><i class='bx bxs-hand-right'></i> किसानों की सूची जिन्हे उपार्जन केंद्र पर फसल विक्रय करने हेतु उपस्थित रहने के SMS किये गए हैं </a></li>
-			<li><a href="#agricenter"><i class='bx bxs-hand-right'></i> रवी फसल विपणन वर्ष 2020 अतिरिक्त उपार्जन केंद्र सूची </a></li>
-			<li><a href="#mandibhavmp"><i class='bx bxs-hand-right'></i> मध्यप्रदेश दैनिक मंडी भाव की जानकारी </a></li>
-			<li><a href="#menu"><i class='bx bxs-hand-right'></i> जिले-वार कोरोना मामलों की जानकारी </a></li>
-			<li><a href="#about"><i class='bx bxs-hand-right'></i> कोरोना से बचाव के तरीके </a></li>
-			<li><a href="#gallery"><i class='bx bxs-hand-right'></i> किसान समाचार </a></li>
-        </ul>
-      </nav><!-- .nav-menu -->
-
-    </div>
-  </header><!-- End Header -->
-
-
-
-
-
+	</header>
+	<!-- End Header -->
 	<!-- ======= Hero Section ======= -->
 	<section id="hero">
 		<div class="hero-container">
 			<div id="heroCarousel" class="carousel slide carousel-fade" data-ride="carousel">
 				<ol class="carousel-indicators" id="hero-carousel-indicators"></ol>
 				<div class="carousel-inner" role="listbox">
-					<div class="carousel-item active" style="background-image: url('krashishakti.jpg');">
+					<div class="carousel-item active_" style="background-image: url('assets/img/raj.png')">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown"><span>रवी फसल विपणन </span></br>वर्ष 2020</h2>
 								<p class="animated fadeInUp">किसान एसएमएस SMS प्राप्त होने पर ही उपज लेकर उपार्जन केंद्र पर बेचने ले जाएँ।</p>
-								<p class="animated fadeInUp">किसानों की जानकारी जिन्हे उपार्जन केंद्र पर फसल विक्रय करने हेतु उपस्थित रहने के SMS किये गए हैं।</p>
-								<div> <a href="#why-us" class="btn-book animated fadeIn"><i class='bx bxs-downvote'></i></a>
+								<div> <a href="#why-us" class="btn-book animated fadeIn"><i class='bx bxs-downvote bx-fade-up' ></i></a>
 								</div>
 							</div>
 						</div>
 					</div>
-					<div class="carousel-item" style="background-image: url('rashn.jpg');">
+					<div class="carousel-item" style="background-image: url('assets/img/slide/rashan.gif');">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown"><span>निःशुल्क विशेष खाद्यान्न</span></br>परिवार सूची</h2>
 								<p class="animated fadeInUp">परिवार सूची जिनके पास पात्रता पर्ची नही है, उनको COVID19 लॉकडॉन का एक माह का निःशुल्क विशेष खाद्यान्न दिया जाएगा</p>
-								<div> <a href="#specials" class="btn-book animated fadeIn"><i class='bx bxs-downvote'></i></a>
+								<div> <a href="#specials" class="btn-book animated fadeIn"><i class='bx bxs-downvote bx-fade-up' ></i></a>
 								</div>
 							</div>
 						</div>
 					</div>
 					<!-- Slide 1 -->
-					<div class="carousel-item" style="background-image: url('krashishakti.jpg');">
+					<div class="carousel-item" style="background-image: url('assets/img/slide/mandi.gif');">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown">मंडी भाव मध्यप्रदेश</h2>
 								<p class="animated fadeInUp">दैनिक भाव की जानकारी</p>
-								<div> <a href="#mandibhavmp" class="btn-book animated fadeIn"><i class='bx bxs-downvote'></i></a>
+								<div> <a href="#mandibhavmp" class="btn-book animated fadeIn"><i class='bx bxs-downvote bx-fade-up' ></i></a>
 								</div>
 							</div>
 						</div>
 					</div>
 					<!-- Slide 2 -->
-					<div class="carousel-item" style="background-image:url('https://rajp7jowa.github.io/krashishakti/assets/img/slide/mask.gif')">
+					<div class="carousel-item" style="background-image:url('assets/img/slide/mask.gif')">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown"><span> घबराएं नहीं </span>, बस बचाव के तरीके अपनाएं </h2>
 								<p class="animated fadeInUp">माता-पिता अपने बच्चों को लेकर घबराएं नहीं, बस अपने साथ-साथ उनमें भी कुछ आदतें डालें, जिनसे कोरोना वायरस से बचा जा सके। कोरोना से बचने के लिए आपको हाईजीन यानी साफ-सफाई का ध्यान रखा होगा।</p>
-								<div> <a href="#needinfo" class="btn-book animated fadeIn"><i class='bx bxs-downvote'></i></a>
+								<div> <a href="#needinfo" class="btn-book animated fadeIn"><i class='bx bxs-downvote bx-fade-up' ></i></a>
 								</div>
 							</div>
 						</div>
 					</div>
 					<!-- Slide 3 -->
-					<div class="carousel-item" style="background-image:url('https://rajp7jowa.github.io/krashishakti/assets/img/slide/home.gif')">
+					<div class="carousel-item" style="background-image:url('assets/img/slide/home.gif')">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown"><span>घर पर रहें, सुरक्षित रहें</span></br>अधिक भीड़-भाड़ वाले इलाकों में ना जाएं</h2>
@@ -129,7 +132,7 @@ fclose($file);
 							</div>
 						</div>
 					</div>
-					<div class="carousel-item" style="background-image:url('https://rajp7jowa.github.io/krashishakti/assets/img/slide/handwash.gif')">
+					<div class="carousel-item" style="background-image:url('assets/img/slide/handwash.gif')">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown">कोशिश करें कि <span> आँख, नाक या मुंह हाथ धोने </span> या सैनिटाइट करने <span> के बाद ही छुएं।</span></h2>
@@ -137,21 +140,21 @@ fclose($file);
 							</div>
 						</div>
 					</div>
-					<div class="carousel-item " style="background-image:url('https://rajp7jowa.github.io/krashishakti/assets/img/slide/covidco.gif')">
+					<div class="carousel-item " style="background-image:url('assets/img/slide/covidco.gif')">
 						<div class="carousel-container">
 							<div class="carousel-content">
 								<h2 class="animated fadeInDown"><div class="simple_lang">COVID-19</div> </h2>
 								<p class="animated fadeInUp">जिले- वार मामलों की जानकारी</p>
-								<div> <a href="#menu" class="btn-book animated fadeIn"><i class='bx bxs-downvote'></i></a>
+								<div> <a href="#menu" class="btn-book animated fadeIn"><i class='bx bxs-downvote bx-fade-up' ></i></a>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-				<a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev"> <span class="carousel-control-prev-icon icofont-simple-left" aria-hidden="true"></span>
+				<a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev"> <span class="carousel-control-prev-icon icofont-simple-left bx-flashing" aria-hidden="true"></span>
 					<span class="sr-only">Previous</span>
 				</a>
-				<a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next"> <span class="carousel-control-next-icon icofont-simple-right" aria-hidden="true"></span>
+				<a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next"> <span class="carousel-control-next-icon icofont-simple-right bx-flashing" aria-hidden="true"></span>
 					<span class="sr-only">Next</span>
 				</a>
 			</div>
@@ -163,7 +166,7 @@ fclose($file);
 		<section id="about" class="about">
 			<div class="container-fluid">
 				<div class="row">
-					<div class="col-lg-5 col-md-5 align-items-stretch video-box" style='background-image: url("https://rajp7jowa.github.io/krashishakti/assets/img/slide/handwashvideo.gif");'>
+					<div class="col-lg-5 col-md-5 align-items-stretch video-box" style='background-image: url("assets/img/slide/handwashvideo.gif");'>
 						<a href="https://youtu.be/pwaoGOgsvwI" class="venobox play-btn mb-4" data-vbtype="video" data-autoplay="true"></a>
 					</div>
 					<div class="col-lg-7 col-md-7 d-flex flex-column justify-content-center align-items-stretch">
@@ -193,19 +196,19 @@ fclose($file);
 				<div class="row">
 					<div class="col-lg-12">
 						<ul class="nav nav-tabs flex-column">
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041923.pdf"> समस्त नगरीय क्षेत्रों की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041923.pdf"> समस्त नगरीय क्षेत्रों की सूची</a>
 							</li>
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041987.pdf"> जनपद पंचायत नरसिंहपुर की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041987.pdf"> जनपद पंचायत नरसिंहपुर की सूची</a>
 							</li>
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041916.pdf"> जनपद पंचायत करेली की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041916.pdf"> जनपद पंचायत करेली की सूची</a>
 							</li>
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041969.pdf">	जनपद पंचायत गोटेगाँव की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041969.pdf">	जनपद पंचायत गोटेगाँव की सूची</a>
 							</li>
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041999.pdf">	जनपद पंचायत साईखेड़ा की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041999.pdf">	जनपद पंचायत साईखेड़ा की सूची</a>
 							</li>
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041982.pdf">	जनपद पंचायत चांवरपाठा की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041982.pdf">	जनपद पंचायत चांवरपाठा की सूची</a>
 							</li>
-							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="https://rajp7jowa.github.io/krashishakti/pdf/2020041980.pdf"> 	जनपद पंचायत चीचली की सूची</a>
+							<li class="nav-item"><a class="nav-link pt-1 pb-1" href="pdf/2020041980.pdf"> 	जनपद पंचायत चीचली की सूची</a>
 							</li>
 						</ul>
 					</div>
@@ -229,22 +232,20 @@ fclose($file);
 			<div class="container">
 				<div class="section-title">
 					<h2><span>रवी विपणन 2020 </span></h2>
-					<p>किसानों की जानकारी जिन्हे उपार्जन केंद्र पर गेहूँ, चना, मसूर विक्रय करने हेतु उपस्थित रहने के SMS किये गए हैं।</p>
-					<p>
-			<!--
+					<!--
+                                                                  <p>किसानों की जानकारी जिन्हे उपार्जन केंद्र पर गेहूँ, चना, मसूर विक्रय करने हेतु उपस्थित रहने के SMS किये गए हैं।</p>
+				<p>
 				<div class="row">
 					<a class="box" href="kisan22.pdf">
 						<p></br>कृषि उपार्जन केंद्र</h2>को उपार्जन केंद्र पर <strong> गेहूँ</strong> विक्रय करने हेतु उपस्थित रहने के SMS किये गए हैं।</p>
 					</a>
-				</div> 
+				</div> </p>
 				-->
-				<?php include_once('kisansms.php') ; ?>
-				</p>
-				<div class="section-title" id="agricenter">
-					<h2>कृषि उपार्जन केंद्र</h2>
-					<p style="font-size:14px;text-align: justify;  text-justify: inter-word;">रबी विपणन वर्ष 2020- 21 में समर्थन मूल्य पर गेहूं का उपार्जन पंजीकृत कृषकों से 15 अप्रैल से 15 मई 2020 तक किया जाना है। कलेक्टर श्री दीपक सक्सेना के अनुमोदन उपरांत डिप्टी कलेक्टर ने जिले में अधिकतम उपार्जन केन्द्रों की संख्या में शिथिलता प्रदान की है। जारी आदेश के अनुसार जिले में गेहूं उपार्जन कार्य हेतु 14 अतिरिक्त उपार्जन केन्द्रों का निर्धारण किया गया है। इस सिलसिले में तहसील नरसिंहपुर हेतु कृषि उपज मंडी नरसिंहपुर के लिए वृहत्ता सेवा सहकारी संस्था नरसिंहपुर केन्द्र क्रमांक 2, नेतराम वेयर हाउस करहैयाखेड़ा के लिए सेवा सहकारी संस्था धमना केन्द्र क्रमांक 2 और समिति परिसर लौकीपार के लिए वृहत्ता सेवा सहकारी संस्था लोकीपार केन्द्र क्रमांक 2 द्वारा उपार्जन का कार्य किया जायेगा। इसी तरह तहसील करेली हेतु समिति परिसर सुआतला के लिए सेवा सहकारी संस्था सुआतला केन्द्र क्रमांक 2 और ग्राम तिंसरा के लिये वृहत्ता सेवा सहकारी संस्था आमगांवबड़ा केन्द्र क्रमांक 2 द्वारा उपार्जन का कार्य किया जायेगा। तहसील गोटेगांव हेतु कृषि उपज मंडी गोटेगांव के लिये वृहत्ता सेवा सहकारी संस्था गोटेगांव केंद्र क्रमांक 3 द्वारा उपार्जन का कार्य किया जायेगा। तहसील गाडरवारा हेतु समिति परिसर गाडरवारा के लिये वृहत्ता सेवा सहकारी संस्था गाडरवारा केन्द्र क्रमांक 2, ग्राम सांईखेड़ा के लिये सेवा सहकारी संस्था रमपुरा केन्द्र क्रमांक 2, ग्राम बेलखेड़ी के लिये सेवा सहकारी संस्था आडे़गांव केन्द्र क्रमांक 2, ग्राम तेंदूखेड़ा के लिये आदिम जाति सेवा सहकारी संस्था गो‍टीटोरिया केन्द्र क्रमांक 2, ग्राम देवरी के लिये सेवा सहकारी संस्था सासबहू केन्द्र क्रमांक 2, ग्राम खेरूआ के लिये सेवा सहकारी संस्था पचामा केन्द्र क्रमांक 2, ग्राम काटजूनगर के लिये वृहत्ता सेवा सहकारी संस्था पलोहा केन्द्र क्रमांक 2 और इमझिरी के लिये सहकारी विपणन समिति खुलरी द्वारा उपार्जन का कार्य किया जायेगा। उपरोक्त समितियां खरीदी केंद्र स्थल पर गेंहू उपार्जन का कार्य पंजीकृत कृषकों से करेंगी तथा उपार्जन केंद्र पर मानव संसाधन, इलेक्ट्रॉनिक उपकरण, बिजली, जनसुविधाएं, डाटा एन्ट्री आपरेटर, सर्वेयर, तुलाई, परिवहर आदि व्यवस्थाएं किया जाना सुनिश्चित करें। उपसंचालक कृषि अपने मैदानी अमले के माध्यम से पर्याप्त प्रचार- प्रसार करेगे कि किसान को एसएमएस में दी गई सूचना अनुसार तिथि को उपार्जन केंद्र पर गेंहू विक्रय हेतु आयेंगे। गेंहू में छन्ना लगाकर साफ- सुथरा अच्छी गुणवत्ता का लेकर आये। समस्त अनुविभागीय राजस्व अधिकारी अपने- अपने अनुविभाग अंतर्गत अनुविभाग स्तरीय उपार्जन समिति का गठन कर उपार्जन केंद्रो का सतत भ्रमण कर समस्त विवादों का अंतिम निराकरण तथा उपार्जित स्कंध की गुणवत्ता की निगरानी करेंगे। उपार्जन केंद्रों पर भौतिक एवं अन्य सुविधाएं, उपार्जित मात्रा की सही प्रविष्टि एवं गुणवत्ता नियंत्रात्मक कार्यवाही व क्रियान्वयन उपायुक्त सहकारिता एवं महाप्रबंधक जिला सहकारी केन्द्रीय बैंक मर्यादित द्वारा सुनिश्चित किया जायेगा।</p>
+					<div class="section-title" id="agricenter">
+						<h2>कृषि उपार्जन केंद्र</h2>
+						<p>रबी विपणन वर्ष 2020- 21 में समर्थन मूल्य पर गेहूं का उपार्जन पंजीकृत कृषकों से 15 अप्रैल से 15 मई 2020 तक किया जाना है। कलेक्टर श्री दीपक सक्सेना के अनुमोदन उपरांत डिप्टी कलेक्टर ने जिले में अधिकतम उपार्जन केन्द्रों की संख्या में शिथिलता प्रदान की है। जारी आदेश के अनुसार जिले में गेहूं उपार्जन कार्य हेतु 14 अतिरिक्त उपार्जन केन्द्रों का निर्धारण किया गया है। इस सिलसिले में तहसील नरसिंहपुर हेतु कृषि उपज मंडी नरसिंहपुर के लिए वृहत्ता सेवा सहकारी संस्था नरसिंहपुर केन्द्र क्रमांक 2, नेतराम वेयर हाउस करहैयाखेड़ा के लिए सेवा सहकारी संस्था धमना केन्द्र क्रमांक 2 और समिति परिसर लौकीपार के लिए वृहत्ता सेवा सहकारी संस्था लोकीपार केन्द्र क्रमांक 2 द्वारा उपार्जन का कार्य किया जायेगा। इसी तरह तहसील करेली हेतु समिति परिसर सुआतला के लिए सेवा सहकारी संस्था सुआतला केन्द्र क्रमांक 2 और ग्राम तिंसरा के लिये वृहत्ता सेवा सहकारी संस्था आमगांवबड़ा केन्द्र क्रमांक 2 द्वारा उपार्जन का कार्य किया जायेगा। तहसील गोटेगांव हेतु कृषि उपज मंडी गोटेगांव के लिये वृहत्ता सेवा सहकारी संस्था गोटेगांव केंद्र क्रमांक 3 द्वारा उपार्जन का कार्य किया जायेगा। तहसील गाडरवारा हेतु समिति परिसर गाडरवारा के लिये वृहत्ता सेवा सहकारी संस्था गाडरवारा केन्द्र क्रमांक 2, ग्राम सांईखेड़ा के लिये सेवा सहकारी संस्था रमपुरा केन्द्र क्रमांक 2, ग्राम बेलखेड़ी के लिये सेवा सहकारी संस्था आडे़गांव केन्द्र क्रमांक 2, ग्राम तेंदूखेड़ा के लिये आदिम जाति सेवा सहकारी संस्था गो‍टीटोरिया केन्द्र क्रमांक 2, ग्राम देवरी के लिये सेवा सहकारी संस्था सासबहू केन्द्र क्रमांक 2, ग्राम खेरूआ के लिये सेवा सहकारी संस्था पचामा केन्द्र क्रमांक 2, ग्राम काटजूनगर के लिये वृहत्ता सेवा सहकारी संस्था पलोहा केन्द्र क्रमांक 2 और इमझिरी के लिये सहकारी विपणन समिति खुलरी द्वारा उपार्जन का कार्य किया जायेगा। उपरोक्त समितियां खरीदी केंद्र स्थल पर गेंहू उपार्जन का कार्य पंजीकृत कृषकों से करेंगी तथा उपार्जन केंद्र पर मानव संसाधन, इलेक्ट्रॉनिक उपकरण, बिजली, जनसुविधाएं, डाटा एन्ट्री आपरेटर, सर्वेयर, तुलाई, परिवहर आदि व्यवस्थाएं किया जाना सुनिश्चित करें। उपसंचालक कृषि अपने मैदानी अमले के माध्यम से पर्याप्त प्रचार- प्रसार करेगे कि किसान को एसएमएस में दी गई सूचना अनुसार तिथि को उपार्जन केंद्र पर गेंहू विक्रय हेतु आयेंगे। गेंहू में छन्ना लगाकर साफ- सुथरा अच्छी गुणवत्ता का लेकर आये। समस्त अनुविभागीय राजस्व अधिकारी अपने- अपने अनुविभाग अंतर्गत अनुविभाग स्तरीय उपार्जन समिति का गठन कर उपार्जन केंद्रो का सतत भ्रमण कर समस्त विवादों का अंतिम निराकरण तथा उपार्जित स्कंध की गुणवत्ता की निगरानी करेंगे। उपार्जन केंद्रों पर भौतिक एवं अन्य सुविधाएं, उपार्जित मात्रा की सही प्रविष्टि एवं गुणवत्ता नियंत्रात्मक कार्यवाही व क्रियान्वयन उपायुक्त सहकारिता एवं महाप्रबंधक जिला सहकारी केन्द्रीय बैंक मर्यादित द्वारा सुनिश्चित किया जायेगा।</p>
+					</div>
 				</div>
-			</div>
 		</section>
 		<!-- End Whu Us Section -->
 		<!-- ======= Contact Section ======= -->
@@ -273,10 +274,39 @@ fclose($file);
 		<section id="gallery" class="gallery">
 			<div class="container-fluid">
 				<div class="row no-gutters">
+					<div class="section-title">
+						<h2><span>टिड्डी दल से बचाव </span> के लिए किसान सतर्क रहें</h2>
+						<p style="font-size:14px;text-align: justify;  text-justify: inter-word;">टिड्डी दल से फसलों के बचाव के लिए किसानों से सतर्क रहने का आग्रह कृषि विज्ञान केन्द्र नरसिंहपुर के वरिष्ठ वैज्ञानिक ने किया है। कृषि विज्ञान केन्द्र ने टिड्डी दल से फसलों के बचाव के लिए जिले के किसानों को सामयिक सलाह दी है।</p>
+						<p style="font-size:14px;text-align: justify;  text-justify: inter-word;">इस सिलसिले में वरिष्ठ वैज्ञानिक एवं कृषि विज्ञान केन्द्र के प्रभारी अधिकारी ने जानकारी दी है कि यह बात संज्ञान में आई है कि टिड्डी दल राजस्थान से लगे हुए मध्यप्रदेश के नीमच जिले से होते हुए उज्जैन जिला और वहां से देवास जिले की कन्नोद तहसील तक पहुंच चुका है। नरसिंहपुर जिले में भी टिड्डी दल का प्रकोप होने की आशंका है। अभी अधिकांश जिले में गन्ना, मूंग, सोयाबीन व मौसमी सब्जियों की फसल लगी हुई है। ऐसे में जिले के किसान टिड्डी दल से सतर्क रहें। अपने खेतों की लगातार निगरानी रखें। टिड्डी दल के आने पर खेतों में तेज ध्वनि करें। थाली, ढोल, डीजे, खाली टीन के डिब्बे बजाकर तेज ध्वनि खेत में की जा सकती है। पटाखे फोड़कर, ट्रेक्टर का सायलेंसर निकालकर आवाज करके टिड्डी दल को आगे की तरफ उड़ाया जा सकता है।</p>
+						<p style="font-size:14px;text-align: justify;  text-justify: inter-word;">कृषि विज्ञान केन्द्र ने फसलों को टिड्डी दल से बचाव के लिए रासायनिक दवाईयों का प्रयोग करने की सलाह भी दी है। सलाह में बताया गया है कि ट्रेक्टर माउनटेड स्प्रेयर पम्प में फ्लोरोपायरीफॉस 20 प्रतिशत ईसी 1200 मिली या डेल्टामेथ्रिन 2.8 प्रतिशत ईसी 625 मिली या डाईफ्लूबेंजूरॉन 25 प्रतिशत डब्ल्यूपी 120 मिली या लेम्डासायलोथ्रिन 5 प्रतिशत ईसी 400 मिली या मेलाथियान 50 प्रतिशत ईसी 1850 मिली में से कोई एक दवा का 500 से 600 लीटर पानी में घोल बनाकर टिड्डियों के ऊपर इसका छिड़काव किया जा सकता है।</p>
+						<p style="font-size:14px;text-align: justify;  text-justify: inter-word;">किसानों को दी गई सामयिक सलाह में बताया गया है कि प्राय: टिड्डी दल का आगमन शाम को 6 बजे से रात्रि 8 बजे के बीच होता है और टिड्डी दल सुबह 7.30 बजे तक दूसरे स्थानों के लिए प्रस्थान करने लगता है। ऐसी स्थिति में टिड्डी दल से फसलों के बचाव के लिए उसी रात में तड़के/ सुबह 3 बजे से लेकर सुबह 7.30 बजे तक उक्त तरीकों का उपयोग कर टिड्डी दल पर नियंत्रण किया जा सकता है। इससे टिड्डी दल से फसलों को बचाया जा सकेगा।</p>
+						<p style="font-size:14px;text-align: justify;  text-justify: inter-word;">टिड्डी दल के नियंत्रण के लिये समस्त जिलों को जिला स्तर पर निगरानी दल गठित करने के निर्देश जारी किये जा चुके हैं। साथ ही अनुभाग स्तर पर भी निगरानी गठित करते हुए टिड्डी के नियंत्रण हेतु समस्त आवश्यक संसाधनों की व्यवस्था हेतु भी निर्देश जारी किये गये हैं, जिससे सूचना प्राप्त होते ही टिड्डी नियंत्रण में लगा हुआ अमला तुरंत प्रभावित स्थल तक पहुँच सके। राज्य स्तर पर भी नियंत्रण कक्ष स्थापित है, जिसका दूरभाष क्रमांक <a href="tel:07552558823"> 0755-2558823</a> है।</p>
+					</div>
 					<div class="col-lg-3 col-md-4">
 						<div class="gallery-item">
-							<a href="ravikhareed.jpg" class="venobox" data-gall="gallery-item">
-								<img src="ravikhareed.jpg" alt="" class="img-fluid">
+							<a href="d1.jpg" class="venobox" data-gall="gallery-item">
+								<img src="d1.jpg" alt="" class="img-fluid">
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4">
+						<div class="gallery-item">
+							<a href="d2.jpg" class="venobox" data-gall="gallery-item">
+								<img src="d2.jpg" alt="" class="img-fluid">
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4">
+						<div class="gallery-item">
+							<a href="d3.jpg" class="venobox" data-gall="gallery-item">
+								<img src="d3.jpg" alt="" class="img-fluid">
+							</a>
+						</div>
+					</div>
+					<div class="col-lg-3 col-md-4">
+						<div class="gallery-item">
+							<a href="d4.jpg" class="venobox" data-gall="gallery-item">
+								<img src="d4.jpg" alt="" class="img-fluid">
 							</a>
 						</div>
 					</div>
@@ -294,14 +324,14 @@ fclose($file);
 		</div>
 		<div class="container">
 			<h3 class="small">यह वेबसाइट किसान संबंधित सूचना और कार्यकलापों का प्रसार करने के लिए तैयार की गई है।</h3>
-		</div>		
+		</div>
 		<div class="container">
-			<div class="social-links"><a href="mailto:raj.parihar@YOPmail.com?Subject=KrashiShakti" class="linkedin"><i class='bx bx-mail-send'></i></a>				
-				<a href="https://github.com/RajP7Jowa" class="github"><i class='bx bxl-github'></i></a>
-				<a href=“https://m.facebook.com/messages/compose?ids=raj.parihar.963434" class="facebook"><i class="bx bxl-facebook"></i></a>
-			</div>		
-			<div class="credits pt-3">
-	        	Designed, Developed & Maintained by <a href="https://github.com/RajP7Jowa/cv">Raj Parihar</a>
+			<div class="social-links"> 
+				<a target="_blank" href="https://m.facebook.com/messages/compose?ids=raj.parihar.963434" class="facebook " title="contact-us: facebook"><i class='bx bxl-facebook bx-tada' ></i></a>
+				<a target="_blank" href="mailto:raj.parihar@YOPmail.com?Subject=KrashiShakti:" class="mail " title="contact-us:mail"><i class='bx bx-mail-send bx-flashing' ></i></a>				
+				</div>		
+			<div class="credits pt-3 ">
+	        	Designed, Developed & Maintained by <a href="mailto:raj.parihar@YOPmail.com?Subject=KrashiShakti:" >Raj Parihar</a>
 	      </div>
 		</div>
 	</footer>
@@ -312,23 +342,21 @@ fclose($file);
 	
 	
 	<!-- Button trigger modal--> 
-<div class="modal fade" id="modalPush" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"style="z-index:10000 !important">
-   <div class="modal-dialog modal-notify modal-info" role="document" >
+<div class="modal fade " id="modalPush " tabindex="-1 " role="dialog " aria-labelledby="exampleModalLabel " aria-hidden="true "style="z-index:10000 !important ">
+   <div class="modal-dialog modal-notify modal-info " role="document " >
       <!--Content--> 
       <div class="modal-content ">
          <!--Header-->
-         <div class="modal-header d-flex justify-content-center" >
-            <h5 ><span class="text-warning">चना एवं मसूर की समर्थन मूल्य पर खरीदी  आज से</span></h5>
-        <di <a type="button" class="close" data-dismiss="modal"><span class="bx bx-x-circle"></span></a>
+         <div class="modal-header d-flex justify-content-center " >
+            <h5 ><span class="text-warning ">चना एवं मसूर की समर्थन मूल्य पर खरीदी  आज से</span></h5>
+        <di <a type="button " class="close " data-dismiss="modal "><span class="bx bx-x-circle "></span></a>
  </div>
          <!--Body--> 
-         <div class="modal-body">
-<p class="text-center">
-            <span class="bx bxs-bell bx-tada mb-4 text-info" style="font-size:50px"></span>
+         <div class="modal-body ">
+<p class="text-center ">
+            <span class="bx bxs-bell bx-tada mb-4 text-info " style="font-size:50px "></span>
 </p>
- <p style="font-size:14px;text-align: justify;  text-justify: inter-word;">
-राज्य शासन के निर्देशानुसार वर्तमान में प्रदेश में चल रहे गेहूं उपार्जन का कार्य के साथ ही बुधवार 29 अप्रैल से चना एवं मसूर की भी समर्थन मूल्य पर खरीदी प्रारंभ की जायेगी। डिप्टी कलेक्टर श्री डीएस तोमर ने बताया कि कलेक्टर श्री दीपक सक्सेना द्वारा सभी सेक्टर ऑफिसर को नोडल एवं सहायक नोडल अधिकारी अनिवार्य रूप से नियमित रूप से उपार्जन केन्द्रों पर उपस्थित रहने के निर्देश दिये हैं। सेक्टर ऑफिसर सभी उपार्जन केन्द्रों का लगातार भ्रमण करते रहें। उन्होंने निर्देश दिये कि इसके लिए सभी उपार्जन केन्द्रों में आवश्यक व्यवस्थायें सुनिश्चित की जाये। राज्य शासन द्वारा जारी गाइड लाइन, लॉक डाउन और सोशल डिस्टेंसिंग का पालन करते हुए यह कार्य प्रारंभ कराया जाये। उल्लेखनीय है कि जिले में चना एवं मसूर के लिए कुल 20 उपार्जन केन्द्र निर्धारित किये गये हैं। चना हेतु 16088 एवं मसूर हेतु 5037 कृषक पंजीकृत हैं।</br>
-</p>
+ <p style="font-size:14px;text-align: justify; text-justify: inter-word; "></p>
          </div>
          <!--Footer--> 
        </div>
@@ -341,32 +369,30 @@ fclose($file);
 	
 	
 	
-	<!-- End Footer --> <a href="#" class="back-to-top"><i class="icofont-simple-up"></i></a>
+	<!-- End Footer --> <a href="# " class="back-to-top "><i class="icofont-simple-up "></i></a>
 	<!-- Vendor JS Files -->
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/jquery/jquery.min.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/jquery.easing/jquery.easing.min.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/jquery-sticky/jquery.sticky.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/venobox/venobox.min.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/vendor/owl.carousel/owl.carousel.min.js"></script>
+	<script src="assets/vendor/jquery/jquery.min.js "></script>
+	<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js "></script>
+	<script src="assets/vendor/venobox/venobox.min.js "></script>
+	<script src="assets/vendor/owl.carousel/owl.carousel.min.js "></script>
 	<!-- Template Main JS File -->
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/js/main.js"></script>
-	<script src="https://rajp7jowa.github.io/krashishakti/assets/js/tmpl.min.js"></script>
+	<script src="assets/js/main.js "></script>
+	<script src="assets/js/tmpl.min.js "></script>
 	<!--    *%=o.statedata[item].id%*      -->
-	<script type="text/x-tmpl" id="tmpl-accordion">
+	<script type="text/x-tmpl " id="tmpl-accordion ">
 		*% var county =1; %*
 			 *% var gTotal =0; %*
 			*% for (var item in o.content){ %*			
 				 *% var lTotal =0; %*
-				<div class="card mb-0">
-					<div class="card-header collapsed about" data-toggle="collapse" href="#collapse*%=county%*"> <a class="card-title">	 *%=item%*	 </a></div>
-					<div id="collapse*%=county%*" class="card-body collapse " data-parent="#accordion">
-						<div class="row menu-container">
+				<div class="card mb-0 ">
+					<div class="card-header collapsed about " data-toggle="collapse " href="#collapse*%=county%* "> <a class="card-title ">	 *%=item%*	 </a></div>
+					<div id="collapse*%=county%* " class="card-body collapse " data-parent="#accordion ">
+						<div class="row menu-container ">
+						
 						*% for (var districtData in o.content[item].districtData){ %*	
-							<div class="col-lg-6 col-md-6 menu-item">
-								<div class="menu-content"> <a href="#">*%=districtData%* </a><span>*%=o.content[item].districtData[districtData].confirmed%* </span> </div>
-								<div class="menu-ingredients">
+							<div class="col-lg-6 col-md-6 menu-item ">
+								<div class="menu-content "> <a href="# ">*%=districtData%* </a><span>*%=o.content[item].districtData[districtData].confirmed%* </span> </div>
+								<div class="menu-ingredients ">
 								 *% if (o.content[item].districtData[districtData].delta.confirmed !=0 ) { %*
 		              		  Delta Confirmed : <em>*%=o.content[item].districtData[districtData].delta.confirmed%*</em>
 		          			  *% }	 %*
@@ -377,40 +403,40 @@ fclose($file);
 							%*
 						 *% } %*
 						</div>
-						<div class="menu-item text-right">
-							<strong class="menu-ingredients text-info">Total Confirmed: *%=lTotal%* *%lTotal=0;%*</strong>
+						<div class="menu-item text-right ">
+							<strong class="menu-ingredients text-info ">Total Confirmed: *%=lTotal%* *%lTotal=0;%*</strong>
 						</div>
 						</div>
 				</div>
 				*% county ++; %*
 			*% } %*
-			<div class="container pt-2">
-				<div class=" menu-item text-right" style="border-top:1px dotted #dddddd">
-					<b class="menu-ingredients text-danger">Total Confirmed : *%=gTotal%* </b>
+			<div class="container pt-2 ">
+				<div class=" menu-item text-right " style="border-top:1px dotted #dddddd ">
+					<b class="menu-ingredients text-danger ">Total Confirmed : *%=gTotal%* </b>
 				</div>
 			</div>
 	</script>
 	<script>
 		function getStateList() {
-		  $.getJSON("https://api.covid19india.org/state_district_wise.json", function(data) {
+		  $.getJSON("https://api.covid19india.org/state_district_wise.json ", function(data) {
 			var stateData =[];
-			stateData["content"] = data;
-			document.getElementById('accordion').innerHTML = tmpl("tmpl-accordion", stateData);
+			stateData["content "] = data;
+			document.getElementById('accordion').innerHTML = tmpl("tmpl-accordion ", stateData);
 		  });
 		}
 	$( document ).ready(function() {
        getStateList();
     });
+
  /*
 	setTimeout(function(){
-		$("#modalPush").modal("show");
+		$("#modalPush ").modal("show ");
 	},1300)
 	setTimeout(function(){
-		$("#modalPush").modal("hide");
+		$("#modalPush ").modal("hide ");
 	},30000);
-	*/
+*/
 	</script>
-	<!-- Google Language Translator  -->
 </body>
 
 </html>
