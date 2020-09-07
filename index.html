@@ -23,7 +23,6 @@
       <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
       <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
       <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-      <link href="assets/vendor/venobox/venobox.min.css" rel="stylesheet">
       <!-- Template Main CSS File -->
       <link href="assets/css/style.css"rel="stylesheet">
    </head>
@@ -264,7 +263,6 @@
 		
 		<script src="assets/vendor/jquery/jquery.min.js"></script>
 		<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="assets/vendor/venobox/venobox.min.js"></script>
 		<script src="assets/js/tmpl.min.js "></script>
 																	
 <!--    *%=o.statedata[item].id%*      -->
@@ -340,23 +338,6 @@
 
 
 <script>
-
-/* Initiate venobox lightbox*/
-$(document).ready(function() { 
-$('.venobox').venobox({
-    framewidth : '400px',                            // default: ''
-    frameheight: '300px',                            // default: ''
-    border     : '10px',                             // default: '0'
-    bgcolor    : '#5dff5e',                          // default: '#fff'
-    titleattr  : 'data-title',                       // default: 'title'
-    numeratio  : true,                               // default: false
-    infinigall : true,                               // default: false
-    share      :  ['download']
-});;
-});
-
-
-
   /***Covid 19 status Api ****/
   function getStateList() {
 	document.getElementById('accordion').innerHTML= '<div class="d-flex justify-content-center"><div class="spinner-border text-warning" role="status"> <span class="sr-only">Loading...</span> </div> </div>';
