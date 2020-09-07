@@ -1,7 +1,7 @@
 <html lang="en">
    <head>
       <meta charset="utf-8">
-      <!-- base href="https://rajp7jowa.github.io/krashishakti/"></base -->
+      <! base href="https://rajp7jowa.github.io/krashishakti/"/base >
       <meta content="width=device-width, initial-scale=1.0" name="viewport">
       <title>कृषिशक्ति KrashiShakti</title>
       <meta name="description" content="देश मे जिले-वार कोरोना वायरस संक्रमण से सक्रिय मामलों (Active Cases) और कुल पुष्टि किये गए मामलों (Confirmed Cases) की जानकारी">
@@ -23,6 +23,7 @@
       <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
       <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
       <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
+      <link href="assets/vendor/venobox/venobox.min.css" rel="stylesheet">
       <!-- Template Main CSS File -->
       <link href="assets/css/style.css"rel="stylesheet">
    </head>
@@ -103,13 +104,12 @@
                         <b class="text-info ">Select Status</b>: अपना Student Type चुने जैसे की यदि आप <span class="text-info">Regular</span> हैं तो Regular </br>
                         सभी जानकारी भरकर <span class="badge badge-info badge-sm">Search</span> Press करें।
                         </p>
-                        <p>
-                        <h6>▶️ Answer Sheet का मुख्य पेज (Main Page) कैसे बनाएं </h6>
-                        <a href="https://youtu.be/4Tq65x4u1HU" class="badge badge-warning badge-pill" data-vbtype="video" data-autoplay="true">  जानने के लिए देखें</a>
-                        </p>
                      </div>
                   </li>
-               </ul>
+                <li data-aos="fade-up">
+                    <i class="bx bx-help-circle icon-help"></i>	<a href="https://youtu.be/p8AOHHRLBSc" class="venobox" data-vbtype="video" data-autoplay="true" ><i class="bx bx-youtube"></i> <span >Answer Sheet</span> उत्तरपुस्तिका कैसे बनायें?</a>                     
+               </li>
+              </ul>
             </div>
          </div>
       </section>
@@ -340,6 +340,23 @@
 
 
 <script>
+
+/* Initiate venobox lightbox*/
+$(document).ready(function() { 
+$('.venobox').venobox({
+    framewidth : '400px',                            // default: ''
+    frameheight: '300px',                            // default: ''
+    border     : '10px',                             // default: '0'
+    bgcolor    : '#5dff5e',                          // default: '#fff'
+    titleattr  : 'data-title',                       // default: 'title'
+    numeratio  : true,                               // default: false
+    infinigall : true,                               // default: false
+    share      :  ['download']
+});;
+});
+
+
+
   /***Covid 19 status Api ****/
   function getStateList() {
 	document.getElementById('accordion').innerHTML= '<div class="d-flex justify-content-center"><div class="spinner-border text-warning" role="status"> <span class="sr-only">Loading...</span> </div> </div>';
