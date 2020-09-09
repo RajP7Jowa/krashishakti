@@ -267,7 +267,6 @@
          </div>
       </div>
       <!--Model Popup ends-->
-		<div id="ramram">rrrrrr</div>
 		<script src="assets/vendor/jquery/jquery.min.js"></script>
 		<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 		<script src="assets/js/tmpl.min.js "></script>
@@ -466,23 +465,17 @@ $("#kssubmit").click(function () {
         cmtmsg: datamsg
       },
       complete: function (xhr, status) {
-        setTimeout(function () {
-          $("#kscontactModal").modal("hide")
-        }, 7000)
-
+        setTimeout(function () { $("#kscontactModal").modal("hide"); }, 7000);
       }
     });  */
-$("#ramram").html("cmtmsg="+encodeURIComponent(datamsg));
-var xhttp = new XMLHttpRequest();
-xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-       // Typical action to be performed when the document is ready:
-       document.getElementById("demo").innerHTML = xhttp.responseText;
-    }
-};
-xhttp.open("GET", "http://krashishakti.eu5.org/test/put_cmtmsg.php", true);
-xhttp.send("cmtmsg="+encodeURIComponent(datamsg));
-  }
+
+$.get( "http://krashishakti.eu5.org/test/put_cmtmsg.php",
+ { cmtmsg: datamsg },
+ function(data) {
+    setTimeout(function () {$("#kscontactModal").modal("hide"); }, 7000);
+ });
+
+ }
 });
 
 
