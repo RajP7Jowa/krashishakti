@@ -461,9 +461,9 @@ $("#kssubmit").click(function () {
     $("#kscontactus").hide();
     $("#ksthankyou").show();
 
-window.open( "http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg), "_blank"); 
-popup.blur();
-window.focus();
+    var popup = window.open( "http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg), "_blank"); 
+    popup.blur();
+    window.focus();
     setTimeout(function () { $("#kscontactModal").modal("hide"); }, 7000);
   }
 });
