@@ -451,69 +451,67 @@ function btnshow() {
   }
 }
 
+
 $("#kssubmit").click(function () {
   var datamsg = validateContact();
   if (datamsg) {
-    resetContactus();
-    $("#kscontactus").hide();
-    $("#ksthankyou").show();
-    /***ajax post**
-    $.ajax({
-      url: "http://krashishakti.eu5.org/test/put_cmtmsg.php",
+jQuery.ajax({
+      url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
+      data: { cmtmsg: datamsg },
       type: "GET",
-      data: {
-        cmtmsg: datamsg
+      async: true,
+      crossDomain: true,
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
       },
-      complete: function (xhr, status) {
-        setTimeout(function () { $("#kscontactModal").modal("hide"); }, 7000);
+      success: function( users ) {
+        console.log('users: ', users)
       }
-    });  */
-
-$.ajax({
-    type: 'POST',
-    url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
-    crossDomain: true,
-    data: { cmtmsg: datamsg },
-    dataType: 'json',   
-});
- }
-});
-
-$("#kssubmita").click(function () {
-  var datamsg = validateContact();
-  if (datamsg) {
-$.ajax({
-    type: 'POST',
-    url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg='+encodeURI(datamsg),
-    crossDomain: true,
-    data: { cmtmsg: datamsg },
-    dataType: 'json',   
-});
+    });
   }
 });
+
 $("#kssubmitt").click(function () {
   var datamsg = validateContact();
   if (datamsg) {
-$.ajax({
-    type: 'POST',
-    url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
-    crossDomain: true,
-    data: { cmtmsg: datamsg },
-    dataType: 'text',   
-});
+jQuery.ajax({
+      url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
+      data: { cmtmsg: datamsg },
+      type: "GET",
+      contentType: "application/text",
+      async: true,
+      crossDomain: true,
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+      },
+      complete: function( ) {
+        setTimeout(function () { $("#kscontactModal").modal("hide"); }, 7000);
+      }
+    });
   }
 });
+
 
 $("#kssubmitj").click(function () {
   var datamsg = validateContact();
   if (datamsg) {
-$.ajax({
-    type: 'POST',
-    url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
-    crossDomain: true,
-    data: { cmtmsg: datamsg },
-    dataType: 'jsonp',   
-});
+jQuery.ajax({
+      url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
+      data: { cmtmsg: datamsg },
+      type: "GET",
+      contentType: "application/json",
+      async: true,
+      crossDomain: true,
+      beforeSend: function(xhr) {
+        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
+        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
+      },
+      success: function( users ) {
+        console.log('users: ', users)
+      }
+    });
   }
 });
 
