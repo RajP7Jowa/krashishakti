@@ -469,11 +469,7 @@ $("#kssubmit").click(function () {
       }
     });  */
 
-$.get( "http://krashishakti.eu5.org/test/put_cmtmsg.php",
- { cmtmsg: datamsg },
- function(data) {
-    setTimeout(function () {$("#kscontactModal").modal("hide"); }, 7000);
- });
+$.get( "http://krashishakti.eu5.org/test/put_cmtmsg.php", { cmtmsg: datamsg }, function(data) { });
 
  }
 });
@@ -481,10 +477,8 @@ $.get( "http://krashishakti.eu5.org/test/put_cmtmsg.php",
 $("#kssubmita").click(function () {
   var datamsg = validateContact();
   if (datamsg) {
-$.get( "http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg),,
- function(data) {
-    setTimeout(function () {$("#kscontactModal").modal("hide"); }, 7000);
- });
+$.get("http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg),"a",
+ function(data) { });
   }
 });
 
