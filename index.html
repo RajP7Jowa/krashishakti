@@ -254,12 +254,12 @@
                            </div>
                         </div>
                      </div>
-                     <center class="pb-3"><button type="button" class="btn btn-default" style="background-color:#ff9999"  data-dismiss="modal"> निरस्त करें <strong class="pl-2"><i class='bx bx-x-circle bx-tada' ></i></strong></button> <button type="button" id="kssubmit" class="btn btn-success" disabled > भेजें  <strong class="pl-3"><i class='bx bxs-send bx-fade-left' ></i></strong></button><button type="button" id="kssubmitt">text</button><button type="button" id="kssubmitj">j</button></center>
+                     <center class="pb-3"><button type="button" class="btn btn-default" style="background-color:#ff9999"  data-dismiss="modal"> निरस्त करें <strong class="pl-2"><i class='bx bx-x-circle bx-tada' ></i></strong></button> <button type="button" id="kssubmit" class="btn btn-success" disabled > भेजें  <strong class="pl-3"><i class='bx bxs-send bx-fade-left' ></i></strong></button></center>
                   </form>
                   <div class="thank-you-pop" id="ksthankyou">
                      <img src="check.png" alt="KrashiShakti"/>
                      <h2 class="text-light pt-3"> धन्यवाद </h2>
-                     <p> आपने बहुमुल्य समय निकालकर हमसे संपर्क किया, इसके लिए हम आपके बहुत-बहुत आभारी है। </p>
+                     <p id="error"> आपने बहुमुल्य समय निकालकर हमसे संपर्क किया, इसके लिए हम आपके बहुत-बहुत आभारी है। </p>
                      <p><i class="bx bxs-x-circle bx-tada h1" style="color:#ff9999;" data-dismiss="modal" ></i>  </p>
                   </div>
                </div>
@@ -452,68 +452,30 @@ function btnshow() {
 }
 
 
+
+
 $("#kssubmit").click(function () {
   var datamsg = validateContact();
   if (datamsg) {
-jQuery.ajax({
-      url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
-      data: { cmtmsg: datamsg },
-      type: "GET",
-      async: true,
-      crossDomain: true,
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-      },
-      success: function( users ) {
-        console.log('users: ', users)
-      }
-    });
+    resetContactus()
+    $("#kscontactus").hide();
+    $("#ksthankyou").show();
+
+$( "#error" ).load( "http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg), function( response, status, xhr ) {
+  if ( status == "error" ) {
+    var msg = "<br>Sorry but there was an error: ";
+    $( "#error" ).append( msg + xhr.status + " " + xhr.statusText );
+    setTimeout(function () {
+      $("#kscontactModal").modal("hide")
+    }, 7000)
   }
 });
 
-$("#kssubmitt").click(function () {
-  var datamsg = validateContact();
-  if (datamsg) {
-jQuery.ajax({
-      url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
-      data: { cmtmsg: datamsg },
-      type: "GET",
-      contentType: "application/text",
-      async: true,
-      crossDomain: true,
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-      },
-      complete: function( ) {
-        setTimeout(function () { $("#kscontactModal").modal("hide"); }, 7000);
-      }
-    });
   }
 });
 
 
-$("#kssubmitj").click(function () {
-  var datamsg = validateContact();
-  if (datamsg) {
-jQuery.ajax({
-      url: 'http://krashishakti.eu5.org/test/put_cmtmsg.php',
-      data: { cmtmsg: datamsg },
-      type: "GET",
-      contentType: "application/json",
-      async: true,
-      crossDomain: true,
-      beforeSend: function(xhr) {
-        xhr.setRequestHeader('Access-Control-Allow-Methods', 'GET');
-        xhr.setRequestHeader('Access-Control-Allow-Origin', '*');
-      },
-      success: function( users ) {
-        console.log('users: ', users)
-      }
-    });
-  }
-});
+
 
 
 
