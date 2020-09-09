@@ -260,8 +260,8 @@
                      <img src="check.png" alt="KrashiShakti"/>
                      <h2 class="text-light pt-3"> धन्यवाद </h2>
                      <p id="error"> आपने बहुमुल्य समय निकालकर हमसे संपर्क किया, इसके लिए हम आपके बहुत-बहुत आभारी है। </p>
-                     <p><i class="bx bxs-x-circle bx-tada h1" style="color:#ff9999;" data-dismiss="modal" ></i>  </p>
-                  </div>
+                     <center class="pb-3"><button type="button" class="btn btn-default" style="background-color:#ff9999"  data-dismiss="modal"> बंद करें <strong class="pl-2"><i class='bx bx-x-circle bx-tada' ></i></strong></button></center>
+                   </div>
                </div>
             </div>
          </div>
@@ -461,23 +461,10 @@ $("#kssubmit").click(function () {
     $("#kscontactus").hide();
     $("#ksthankyou").show();
 
-$( "#error" ).load( "http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg), function( response, status, xhr ) {
-  if ( status == "error" ) {
-    var msg = "<br>Sorry but there was an error: ";
-    $( "#error" ).append( msg + xhr.status + " " + xhr.statusText );
-    setTimeout(function () {
-      $("#kscontactModal").modal("hide")
-    }, 7000)
+    window.open( "http://krashishakti.eu5.org/test/put_cmtmsg.php?cmtmsg="+encodeURI(datamsg), "_blank"); 
+    setTimeout(function () { $("#kscontactModal").modal("hide"); }, 7000);
   }
 });
-
-  }
-});
-
-
-
-
-
 
 
 function openContactUs() {
