@@ -199,9 +199,9 @@
     items: 1
   });
 
-  // Initiate venobox lightbox
+  /* Initiate venobox lightbox
   $(document).ready(function() {
     $('.venobox').venobox();
   });
-
+  */
 })(jQuery);
