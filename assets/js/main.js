@@ -1,5 +1,5 @@
 /**
-* Template Name: Delicious - v2.0.0
+* Template Name: Delicious - v2.1.0
 * Template URL: https://bootstrapmade.com/delicious-free-restaurant-bootstrap-theme/
 * Author: BootstrapMade.com
 * License: https://bootstrapmade.com/license/
@@ -8,28 +8,14 @@
   "use strict";
 
   // Smooth scroll for the navigation menu and links with .scrollto classes
+  var scrolltoOffset = $('#header').outerHeight() - 1;
   $(document).on('click', '.nav-menu a, .mobile-nav a, .scrollto', function(e) {
     if (location.pathname.replace(/^\//, '') == this.pathname.replace(/^\//, '') && location.hostname == this.hostname) {
-      e.preventDefault();
       var target = $(this.hash);
       if (target.length) {
+        e.preventDefault();
 
-        var scrollto = target.offset().top;
-        var scrolled = 51;
-
-        if ($('#header').length) {
-          scrollto -= $('#header').outerHeight()
-
-          if (!$('#header').hasClass('header-scrolled')) {
-            scrollto += scrolled;
-          }
-        }
-
-        if ($('#topbar').length) {
-          if (!$('#topbar').hasClass('topbar-scrolled')) {
-            scrollto -= $('#topbar').outerHeight()
-          }
-        }
+        var scrollto = target.offset().top - scrolltoOffset;
 
         if ($(this).attr("href") == '#header') {
           scrollto = 0;
@@ -50,6 +36,19 @@
           $('.mobile-nav-overly').fadeOut();
         }
         return false;
+      }
+    }
+  });
+
+  // Activate smooth scroll on page load with hash links in the url
+  $(document).ready(function() {
+    if (window.location.hash) {
+      var initial_nav = window.location.hash;
+      if ($(initial_nav).length) {
+        var scrollto = $(initial_nav).offset().top - scrolltoOffset;
+        $('html, body').animate({
+          scrollTop: scrollto
+        }, 1500, 'easeInOutExpo');
       }
     }
   });
@@ -94,7 +93,7 @@
   var main_nav = $('.nav-menu, #mobile-nav');
 
   $(window).on('scroll', function() {
-    var cur_pos = $(this).scrollTop() + 80;
+    var cur_pos = $(this).scrollTop() + 200;
 
     nav_sections.each(function() {
       var top = $(this).offset().top,
@@ -106,7 +105,7 @@
         }
         main_nav.find('a[href="#' + $(this).attr('id') + '"]').parent('li').addClass('active');
       }
-      if (cur_pos < 200) {
+      if (cur_pos < 300) {
         $(".nav-menu ul:first li:first").addClass('active');
       }
     });
@@ -145,9 +144,8 @@
   });
 
   heroCarousel.on('slid.bs.carousel', function(e) {
-    $(this).find('h2').addClass('animated fadeInDown');
-    $(this).find('p').addClass('animated fadeInUp');
-    $(this).find('.btn-get-started').addClass('animated fadeInUp');
+    $(this).find('h2').addClass('animate__animated animate__fadeInDown');
+    $(this).find('p, .btn-menu, .btn-book').addClass('animate__animated animate__fadeInUp');
   });
 
   // Back to top button
@@ -203,5 +201,5 @@
   $(document).ready(function() {
     $('.venobox').venobox();
   });
-  */
+   */
 })(jQuery);
