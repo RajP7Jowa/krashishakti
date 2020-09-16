@@ -1,7 +1,7 @@
 <html lang="en">
    <head>
       <meta charset="utf-8">
-      <!--:base href="https://rajp7jowa.github.io/krashishakti/"></base -->
+      <!--base href="https://rajp7jowa.github.io/krashishakti/"></base -->
       <meta content="width=device-width, initial-scale=1.0" name="viewport">
       <title>कृषिशक्ति KrashiShakti</title>
       <meta name="description" content="देश मे जिले-वार कोरोना वायरस संक्रमण से सक्रिय मामलों (Active Cases) और कुल पुष्टि किये गए मामलों (Confirmed Cases) की जानकारी">
@@ -23,7 +23,8 @@
       <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
       <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
       <link href="assets/vendor/animate.css/animate.min.css" rel="stylesheet">
-      <link href="assets/vendor/venobox/venobox.min.css" rel="stylesheet">
+      <link href="assets/vendor/owl.carousel/assets/owl.carousel.min.css" rel="stylesheet">
+
       <!-- Template Main CSS File -->
       <link href="assets/css/style.css"rel="stylesheet">
      <style>
@@ -133,14 +134,13 @@
 						</div>
 					</div>
 				</div>
-				<a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev"> <span class="carousel-control-prev-icon icofont-simple-left bx-flashing" aria-hidden="true"></span>
+				<a class="carousel-control-prev" href="#heroCarousel" role="button" data-slide="prev"> <span class="carousel-control-prev-icon bx bx-caret-left bx-flashing" aria-hidden="true"></span>
 					<span class="sr-only">Previous</span>
 				</a>
-				<a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next"> <span class="carousel-control-next-icon icofont-simple-right bx-flashing" aria-hidden="true"></span>
+				<a class="carousel-control-next" href="#heroCarousel" role="button" data-slide="next"> <span class="carousel-control-next-icon bx bx-caret-right bx-flashing" aria-hidden="true"></span>
 					<span class="sr-only">Next</span>
 				</a>
 			</div>
-		</div>
 	</section>
 	<!-- End Hero -->
 	<section id="contact" class="contact">
@@ -300,10 +300,12 @@
       </div>
    </div>
 </div>
+<a href="# " class="back-to-top "><i class='bx bxs-up-arrow-alt ' ></i></a>
 <!--Model Popup ends-->
 		<script src="assets/vendor/jquery/jquery.min.js"></script>
 		<script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-		<script src="assets/vendor/venobox/venobox.min.js"></script>
+		<srcipt src="assets/vendor/owl-carousel/owl.carousel.min.js"></srcipt>
+		<script src="assets/js/main.js"></script>
 		<script src="assets/js/tmpl.min.js "></script>
 																	
 <!--    *%=o.statedata[item].id%*      -->
@@ -379,23 +381,6 @@
 
 
 <script>
-
-/* Initiate venobox lightbox*/
-$(document).ready(function() { 
-$('.venobox').venobox({
-    framewidth : '400px',                            // default: ''
-    frameheight: '300px',                            // default: ''
-    border     : '10px',                             // default: '0'
-    bgcolor    : '#5dff5e',                          // default: '#fff'
-    titleattr  : 'data-title',                       // default: 'title'
-    numeratio  : true,                               // default: false
-    infinigall : true,                               // default: false
-    share      :  ['download']
-});;
-});
-
-
-
   /***Covid 19 status Api ****/
   function getStateList() {
 	document.getElementById('accordion').innerHTML= '<div class="d-flex justify-content-center"><div class="spinner-border text-warning" role="status"> <span class="sr-only">Loading...</span> </div> </div>';
@@ -541,6 +526,8 @@ function updateOnlineStatus(event) {
   var condition = navigator.onLine ? "ksonline" : "ksoffline";
   document.body.className = condition;
 }
+
+if( window.self == window.top ) { (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){ (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o), m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m) })(window,document,'script','//www.google-analytics.com/analytics.js','ga'); ga('create', 'UA-55234356-4', 'auto'); ga('send', 'pageview'); } 
 		</script>
 	</body>
 </html>
