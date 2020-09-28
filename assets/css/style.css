@@ -1026,7 +1026,7 @@ footer .credits {
 }
 
 #accordion .panel-body {
-  border-left: 3px solid #a6a29d;
+  border-left: 3px solid #5f5950;
   border-top: none;
   background: #fff;
   color: #1c2336;
@@ -1038,7 +1038,7 @@ footer .credits {
   content: "";
   height: 3px;
   width: 100%;
-  background: #a6a29d;
+  background: #5f5950;
   position: absolute;
   bottom: 0;
   left: 0;
