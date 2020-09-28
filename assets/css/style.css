@@ -993,7 +993,7 @@ footer .credits {
   height: 30px;
   line-height: 25px;
   border-radius: 50%;
-  background: #5f5950;
+  background: #a6a29d;
   font-size: 14px;
   font-weight: 400;
   color: #fff;
@@ -1006,7 +1006,7 @@ footer .credits {
 
 #accordion .panel-title a.collapsed:before {
   content: "👇";
-  background: #5f5950;
+  background: #a6a29d;
   border: 4px solid #fff;
 }
 
@@ -1014,7 +1014,7 @@ footer .credits {
   content: "";
   width: 17px;
   height: 7px;
-  background: #fe7725;
+  background: #a6a29d;
   position: absolute;
   top: 22px;
   right: 0;
@@ -1022,11 +1022,11 @@ footer .credits {
 
 #accordion .panel-title a.collapsed:after {
   width: 19px;
-  background: #fe7725;
+  background: #a6a29d;
 }
 
 #accordion .panel-body {
-  border-left: 3px solid #5f5950;
+  border-left: 3px solid #a6a29d;
   border-top: none;
   background: #fff;
   color: #1c2336;
