@@ -1,13 +1,177 @@
-<!DOCTYPE html>
 <html lang="en">
+
 <head>
-   <meta charset="UTF-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>RajP7Jowa</title>
+   <meta charset="utf-8">
+   <!--base href="https://rajp7jowa.github.io/krashishakti/"></base -->
+   <meta content="width=device-width, initial-scale=1.0" name="viewport">
+   <title>कृषिशक्ति KrashiShakti</title>
+
+   <style>
+      body.ksoffline #footer,
+
+      body.ksoffline {
+         background: linear-gradient(#f80, #fff)
+      }
+
+      #ksoffline .offline {
+         height: 53vh;
+         position: relative;
+         top: 22vh
+      }
+
+      .trafficlight {
+         background: #222;
+         background-image: linear-gradient(transparent 2%, transparent 3%, #111 30%);
+         width: 15vh;
+         height: 40vh;
+         margin: 4vh auto 0;
+         border-radius: 0 0 8vh 8vh;
+         position: absolute;
+         bottom: 24.5vh;
+         left: calc(50% - 7.5vh);
+         border: solid .5vh #333
+      }
+
+      .trafficlight:before {
+         background: #222;
+         background-image: radial-gradient(#444, #000);
+         content: "";
+         width: 15vh;
+         height: 15vh;
+         margin: 0 auto;
+         position: absolute;
+         top: -2vh;
+         margin-left: 0ph;
+         border-radius: 50%;
+         z-index: -1
+      }
+
+      .trafficlight:after {
+         background: #222;
+         background-image: linear-gradient(-90deg, #222 0, #444 30%, #000);
+         content: "";
+         width: 5vh;
+         height: 13vh;
+         margin-left: 4.5vh;
+         position: absolute;
+         top: 30vh;
+         z-index: -1
+      }
+
+      .protector {
+         background: 0 0;
+         width: 24vh;
+         height: 0;
+         position: absolute;
+         top: 2vh;
+         left: -5vh;
+         border-right: solid 4vh transparent;
+         border-left: solid 4vh transparent;
+         border-top: solid 10vh #222;
+         border-radius: 1.5vh;
+         z-index: -1
+      }
+
+      .protector:nth-child(2) {
+         top: 14vh
+      }
+
+      .protector:nth-child(3) {
+         top: 26vh
+      }
+
+      .red {
+         background: red;
+         background-image: radial-gradient(brown, transparent);
+         color: red;
+         top: 2vh;
+         border: dotted .2vh red
+      }
+
+      .yellow {
+         background: #ff0;
+         background-image: radial-gradient(orange, transparent);
+         color: #ff0;
+         border: dotted .2vh #ff0;
+         top: 14.5vh
+      }
+
+      .green {
+         background: green;
+         background-image: radial-gradient(lime, transparent);
+         color: green;
+         border: dotted .2vh #0f0;
+         top: 27vh
+      }
+
+      .green,
+      .red,
+      .yellow {
+         background-size: .5vh .5vh;
+         width: 10vh;
+         height: 10vh;
+         border-radius: 50%;
+         position: absolute;
+         left: 2vh;
+         box-shadow: 0 0 2vh #111 inset;
+         cursor: pointer;
+         font-weight: 900;
+         font-size: 2.2vh;
+         text-align: center;
+         line-height: 10vh
+      }
+
+      #ksoffline .green,
+      #ksoffline .yellow {
+         opacity: .3
+      }
+
+      #ksoffline .red {
+         opacity: 1
+      }
+   </style>
+
+
 </head>
-<body>
+<!--https://bit.ly/3gVoFTh-->
+
+<body class="ksoffline">
+   <main id="ksoffline">
+      <div class="offline">
+         <h2 id="heading"></h2>
+         <div class="trafficlight">
+            <div class="protector"></div>
+            <div class="protector"></div>
+            <div class="protector"></div>
+            <div class="red">@&#175;&&#175;@</div>
+            <div class="yellow">{_?_}</div>
+            <div class="green">>>></div>
+         </div>
+      </div>
+      <footer>
+         <div class="container" style="text-align: center;">
+            <p>
+               यह वेबसाइट <a href="#">किसान और कृषि </a> संबंधित सूचना और कार्यकलापों का प्रसार करने के लिए तैयार की गई
+               है।
+            </p>
+            <div style="width: 100%; text-align: center;">
+               <table border="0" cellpadding="0" width="100%">
+                  <tr>
+                     <td class="text-left"><a target="_blank"
+                           href="mailto:raj.parihar@YOPmail.com?Subject=KrashiShakti:" style="cursor: pointer;"
+                           title="contact-us:mail"> 📨️ Contact-us</a> </td>
+                     <td style="text-align: right;">Designed by <a style="cursor: pointer;"
+                           href="https://m.facebook.com/messages/compose?ids=raj.parihar.963434">Raj Parihar</a></td>
+                  </tr>
+               </table>
+            </div>
+         </div>
+      </footer>
+   </main>
    <script>
-      window.location="http://krashishakti.eu5.org/";
+      window.location="http://krashishakti.eu5.org/"
    </script>
+
 </body>
+
 </html>
