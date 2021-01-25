@@ -1,177 +1,186 @@
-<html lang="en">
+{{define "error"}}
+<!DOCTYPE html>
+<html>
 
 <head>
-   <meta charset="utf-8">
-   <!--base href="https://rajp7jowa.github.io/krashishakti/"></base -->
-   <meta content="width=device-width, initial-scale=1.0" name="viewport">
-   <title>कृषिशक्ति KrashiShakti</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KrashiShakti</title>
+  <style>
+  body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji'; margin: 0; line-height: 2; 
 
-   <style>
-      body.ksoffline #footer,
+  }
 
-      body.ksoffline {
-         background: linear-gradient(#f80, #fff)
-      }
+	*, ::after, ::before { box-sizing: border-box; border-width: 0; border-style: solid; border-color: #e5e7eb;}
+	a { color: inherit; text-decoration: inherit;}
+	b,strong {  font-weight: bolder;}
+	ol, ul { list-style: none; list-style-type: none; margin: 0; padding: 0; }
+  .py-cont {height: 30vh;}
+  .-mt-cont { margin-top: -14vh; }
 
-      #ksoffline .offline {
-         height: 53vh;
-         position: relative;
-         top: 22vh
-      }
-
-      .trafficlight {
-         background: #222;
-         background-image: linear-gradient(transparent 2%, transparent 3%, #111 30%);
-         width: 15vh;
-         height: 40vh;
-         margin: 4vh auto 0;
-         border-radius: 0 0 8vh 8vh;
-         position: absolute;
-         bottom: 24.5vh;
-         left: calc(50% - 7.5vh);
-         border: solid .5vh #333
-      }
-
-      .trafficlight:before {
-         background: #222;
-         background-image: radial-gradient(#444, #000);
-         content: "";
-         width: 15vh;
-         height: 15vh;
-         margin: 0 auto;
-         position: absolute;
-         top: -2vh;
-         margin-left: 0ph;
-         border-radius: 50%;
-         z-index: -1
-      }
-
-      .trafficlight:after {
-         background: #222;
-         background-image: linear-gradient(-90deg, #222 0, #444 30%, #000);
-         content: "";
-         width: 5vh;
-         height: 13vh;
-         margin-left: 4.5vh;
-         position: absolute;
-         top: 30vh;
-         z-index: -1
-      }
-
-      .protector {
-         background: 0 0;
-         width: 24vh;
-         height: 0;
-         position: absolute;
-         top: 2vh;
-         left: -5vh;
-         border-right: solid 4vh transparent;
-         border-left: solid 4vh transparent;
-         border-top: solid 10vh #222;
-         border-radius: 1.5vh;
-         z-index: -1
-      }
-
-      .protector:nth-child(2) {
-         top: 14vh
-      }
-
-      .protector:nth-child(3) {
-         top: 26vh
-      }
-
-      .red {
-         background: red;
-         background-image: radial-gradient(brown, transparent);
-         color: red;
-         top: 2vh;
-         border: dotted .2vh red
-      }
-
-      .yellow {
-         background: #ff0;
-         background-image: radial-gradient(orange, transparent);
-         color: #ff0;
-         border: dotted .2vh #ff0;
-         top: 14.5vh
-      }
-
-      .green {
-         background: green;
-         background-image: radial-gradient(lime, transparent);
-         color: green;
-         border: dotted .2vh #0f0;
-         top: 27vh
-      }
-
-      .green,
-      .red,
-      .yellow {
-         background-size: .5vh .5vh;
-         width: 10vh;
-         height: 10vh;
-         border-radius: 50%;
-         position: absolute;
-         left: 2vh;
-         box-shadow: 0 0 2vh #111 inset;
-         cursor: pointer;
-         font-weight: 900;
-         font-size: 2.2vh;
-         text-align: center;
-         line-height: 10vh
-      }
-
-      #ksoffline .green,
-      #ksoffline .yellow {
-         opacity: .3
-      }
-
-      #ksoffline .red {
-         opacity: 1
-      }
-   </style>
+  .relative { position: relative; }
+	.absolute { position: absolute; }
+	.left-0 { left: 0;}
+	.top-0 { top: 0; }
+  .text-white { color: rgba(255, 255, 255, 1); }
+  .text-black { color: rgba(0, 0, 0, 1); }
+  .bg-saffron { background-color: #F4C430; background-image: linear-gradient(to right, #FF9933, #F08A24 ,#FFCC99 );
+    background-size: 400% 400%;
+    animation: gradient 10s ease infinite;}
+  .bg-green {  background-color: #006400; background-image: linear-gradient(to right, #2B7E1F, #64B352, #9BEC85);
+    background-size: 400% 400%;
+    animation: gradient 11s ease infinite;
+    }
+  .bg-white {   background-image: radial-gradient(circle farthest-corner at center, rgba(226, 226, 255, 1) 40%, rgba(255, 255, 255, 1) 100%);}
 
 
+
+
+  .h-screen { height: 100vh; }
+  .shadow { box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06); }
+  .hover\:shadow-md:hover { box-shadow: 0 0 #0000, 0 0 #0000, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+  .px-12 { padding-left: 3rem; padding-right: 3rem }
+  .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
+  .max-w-full { max-width: 100% }
+  .mx-auto { margin-left: auto; margin-right: auto;}
+  .my-auto { margin-top: auto; margin-bottom: auto; }
+  .mb-12 { margin-bottom: 15vh; }
+  .z-10 { z-index: 10;  }
+  .w-full { width: 100%; }
+  .items-center { align-items: center; }
+  .flex { display: flex; }
+  .w-auto {  width: auto;}
+  .font-semibold { font-weight: 600; }
+  .text-xl { font-size: 1.25rem; line-height: 1.75rem; }
+  .rounded-md { border-radius: .5rem; }
+	.border-t-1 {border-top-width:2px}
+	.border-gray-300 {border-color: rgba(209,213,219,1);}
+	.flex-wrap { flex-wrap: wrap; }
+	.text-gray-600, .text-gray-700 { color: rgba(0, 0, 0,1); }
+	.hover\:text-gray-900:hover, .hover\:text-gray-800:hover { color: rgba(17, 24, 39, 1); }
+	.py-1 { padding-top: .25rem; padding-bottom: .25rem; }
+	.list-none {  list-style-type: none;}
+	.block { display: block; }
+	.text-sm { font-size: .875rem; line-height: 1.25rem;}
+	.text-center { text-align: center; }
+  .container { width: 100% }
+	.justify-center{justify-content:center}
+  .btn:hover {background-color: rgba(107,114,128,1);}
+  .btn{ border-radius: 50%;}
+  
+  @media (min-width:640px) { .container {max-width: 640px;} }
+  @media (min-width:768px) {
+		.container { max-width: 768px }
+		.md\:px-12 { padding-left: 3rem; padding-right: 3rem;}
+		.md\:justify-between {  justify-content: space-between; }
+		.md\:text-left { text-align: left; }
+		.md\:w-4\/12 { width: 33.333333%; }
+		.md\:w-8\/12 { width: 66.666667%; }
+		.md\:justify-end { justify-content: flex-end;}
+    .-mt-cont { margin-top: -10vh; }
+	}
+  @media (min-width:1024px) { .container { max-width: 1024px;}}
+  @media (min-width:1280px) { .container {   max-width: 1280px }}
+  @media (min-width:1536px) { .container {   max-width: 1536px }}
+
+  @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; }}
+
+/* .bg-white-main{ 
+    background-color: rgba(255, 255, 255, .6);
+  } */
+.bg-white-main {
+  margin: 0 auto;
+  background-color: rgba(255, 255, 255, 0.9);
+  animation-name: stretch;
+  animation-duration: 1.5s; 
+  animation-timing-function: ease-out; 
+  animation-delay: 0;
+  animation-direction: alternate;
+  animation-iteration-count: infinite;
+  animation-fill-mode: none;
+  animation-play-state: running;
+}
+@keyframes stretch {
+  0% {
+    transform: scale(.97);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 2rem;
+  }
+  50% {
+    background-color: rgba(255, 255, 255, 1);
+  }
+  100% {
+    transform: scale(1);
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 5rem;
+  }
+}
+  </style>
 </head>
-<!--https://bit.ly/3gVoFTh-->
-
-<body class="ksoffline">
-   <main id="ksoffline">
-      <div class="offline">
-         <h2 id="heading"></h2>
-         <div class="trafficlight">
-            <div class="protector"></div>
-            <div class="protector"></div>
-            <div class="protector"></div>
-            <div class="red">@&#175;&&#175;@</div>
-            <div class="yellow">{_?_}</div>
-            <div class="green">>>></div>
-         </div>
-      </div>
-      <footer>
-         <div class="container" style="text-align: center;">
-            <p>
-               यह वेबसाइट <a href="#">किसान और कृषि </a> संबंधित सूचना और कार्यकलापों का प्रसार करने के लिए तैयार की गई
+<body class="relative bg-green h-screen">
+  <div class="w-full">
+    <div class="bg-white">
+      <div class="bg-saffron py-cont"></div>
+      <nav class="absolute top-0 left-0 w-full z-10 flex items-center flex-wrap py-4 px-12 shadow" style="background-color: #42A341;">
+        <div class="flex w-auto">
+          <div class="flex items-center text-white">
+            <span class="font-semibold text-xl">कृषिशक्ति</span>
+          </div>
+        </div>
+        <div class="relative text-gray-600" style="margin-left:auto;">
+          <div class="text-white">
+            <a href="http://krashishakti.eu5.org/" class="btn block ">
+              <img src="./assets/img/favicon.ico" style="padding: 0; margin: 0; max-height: 40px; width: auto;"/>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <div class="flex -mt-cont">
+        <!-- This item will grow -->
+        <div class="container bottom-0 max-w-full mx-auto md:px-12 mb-12">
+          <div class="bg-white-main rounded-md my-auto shadow hover:shadow-md py-4 ">
+            <div class="px-12 max-w-full">
+              <div class="text-black">
+                <h1> KrashiShakti </h1>
+              </div>
+              <div class="text-gray-600 text-xl mb-12">
+                 <p>
+               यह <a href="http://krashishakti.eu5.org/" class="hover:text-gray-800"> वेबसाइट </a> किसान और कृषि संबंधित सूचना और कार्यकलापों का प्रसार करने के लिए तैयार की गई
                है।
             </p>
-            <div style="width: 100%; text-align: center;">
-               <table border="0" cellpadding="0" width="100%">
-                  <tr>
-                     <td class="text-left"><a target="_blank"
-                           href="mailto:raj.parihar@YOPmail.com?Subject=KrashiShakti:" style="cursor: pointer;"
-                           title="contact-us:mail"> 📨️ Contact-us</a> </td>
-                     <td style="text-align: right;">Designed by <a style="cursor: pointer;"
-                           href="https://m.facebook.com/messages/compose?ids=raj.parihar.963434">Raj Parihar</a></td>
-                  </tr>
-               </table>
+              </div>
             </div>
-         </div>
-      </footer>
-   </main>
-   <script>
-      window.location="http://krashishakti.eu5.org/"
-   </script>
+          </div>
+        </div>
+      </div>
+      
 
+    </div>
+    <footer class="absolute bottom-start w-full py-4 border-t-2 border-gray-300 ">
+        <div class="container mx-auto">
+            <div class="flex flex-wrap items-center md:justify-between justify-center">
+                <div class="w-full md:w-4/12">
+                    <div class="text-sm text-gray-600 font-semibold py-1 text-center md:text-left">
+                        <a target="_blank" class="text-gray-600 hover:text-gray-800 text-sm font-semibold py-1"
+                               href="mailto:raj.parihar@YOPmail.com?Subject=KrashiShakti:"   title="contact-us:mail"> 📨️ Contact-us</a>
+                    </div>
+                </div>
+                <div class="w-full md:w-8/12">
+                    <ul class="flex flex-wrap list-none md:justify-end justify-center">
+                        <li>
+                            <a class="text-gray-700 hover:text-gray-900 text-sm font-semibold block py-1"
+                               href="https://m.facebook.com/messages/compose?ids=raj.parihar.963434"><i>Designed by: Raj Parihar</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+  <script>
+    window.location="http://krashishakti.eu5.org/"
+  </script>
+</div>
 </body>
 
 </html>
