@@ -170,16 +170,15 @@
    <section id="mpboardsolution" class="contact">
       <div class="container">
          <div class="section-title">
-            <h2> MP Board Solutions <div><small><span>(एमपी बोर्ड की पाठ्यपुस्तकों के समाधान उत्तरपुस्तिका गाइड)</span></small></div></h2>
-            <p >
+            <h2> MP Board Solutions <div class="pt-2"><small><span>(एमपी बोर्ड की पाठ्यपुस्तकों के समाधान उत्तरपुस्तिका गाइड)</span></small></div></h2>
+         </div>
+      </div>
+      <div class="container text-justify" id="accordion" role="tablist" aria-multiselectable="false">
             <h5 >
             हिंदी और अंग्रेजी दोनों माध्यमों में सभी वर्गों और विषयों के लिए एमपी बोर्ड परीक्षाओं के लिए नवीनतम एमपी पाठ्यक्रम के एमपी बोर्ड समाधान उत्तरपुस्तिका (गाइड) प्राप्त करें। कक्षा 12 वीं, 11 वीं, 10 वीं, 9 वीं, 8 वीं, 7 वीं और 6 वीं, 5 वीं, 5 वीं, 4 वीं, 3 वीं, 2 वीं, प्रथम सभी विषयों के लिए चरण एमपी बोर्ड उत्तरपुस्तिका (गाइड) हैं। आप एनसीईआरटी मध्य प्रदेश सिलेबस एमपी बोर्ड की पाठ्यपुस्तकों के समाधान नि: शुल्क पीडीएफ डाउनलोड विकल्प के साथ भी डाउनलोड कर सकते हैं। 
             </h5>
-            </p>
-         </div>
-      </div>
-      <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="false">
-         <div class="text-center"><button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#mpboard" id="mpboardgetdata"> देखिये 👀</button></div>
+            <p>Get MP Board Solutions of Latest MP syllabus 2019-20 edition for MP Board Examinations for all Classes and Subjects in both Hindi and English Medium on MPBoardSolutions.com. We provide step by step MP Board Solutions for Class 12th, 11th, 10th, 9th, 8th, 7th, and 6th, 5th, 4th, 3rd, 2nd, 1st all subjects. You can also download the NCERT Madhya Pradesh Syllabus MP Board Textbooks Solutions with a Free PDF download option.</p>
+         <div class="text-center"><button type="button" class="btn btn-warning btn-lg" data-toggle="modal" data-target="#mpboardsolutionModal" id="mpboardgetdata"> देखिये 👀</button></div>
       </div>
    </section>
    <section id="menu" class="menu">
@@ -324,6 +323,25 @@
                <p> &#2310;&#2346;&#2344;&#2375; &#2348;&#2361;&#2369;&#2350;&#2369;&#2354;&#2381;&#2351; &#2360;&#2350;&#2351; &#2344;&#2367;&#2325;&#2366;&#2354;&#2325;&#2352; &#2361;&#2350;&#2360;&#2375; &#2360;&#2306;&#2346;&#2352;&#2381;&#2325; &#2325;&#2367;&#2351;&#2366;, &#2311;&#2360;&#2325;&#2375; &#2354;&#2367;&#2319; &#2361;&#2350; &#2310;&#2346;&#2325;&#2375; &#2348;&#2361;&#2369;&#2340;-&#2348;&#2361;&#2369;&#2340; &#2310;&#2349;&#2366;&#2352;&#2368; &#2361;&#2376;&#2404; </p>
                <p><i class="bx bxs-x-circle bx-tada h1" style="color:#ff9999;" data-dismiss="modal" ></i>  </p>
             </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<!--Model Popup starts MP Board soolution-->
+<div class="modal animated bounceInUp" id="mpboardsolutionModal" role="dialog" data-backdrop="static" data-keyboard="false">
+   <div class="modal-dialog" style="width: 100vw; max-width: none; height: 100%; margin: 0;">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4><small><span> एमपी बोर्ड की पाठ्यपुस्तकों के समाधान उत्तरपुस्तिका गाइड</span></small></h4>
+            <button type="button" class="close" data-dismiss="modal" aria-label=""><i class='bx bx-window-close bx-tada' ></i></button>
+         </div>
+         <div class="modal-body p-0" style="width: 100vw; max-width: none; height: 100%; margin: 0;">
+            <iframe scrolling="yes" id="gmap_canvas"  src="https://www.mpboardsolutions.com/#main" align="top" frameborder="0" marginheight="0" marginwidth="0" style="border:0; width: 100vw; max-width: none; height: 90vh; margin: 0;" allowfullscreen ></iframe>
+         </div>
+         <div class="modal-footer p-0">
+            <small><p class="mr-auto text-left pl-3"> <button type="button" data-dismiss="modal" class ="badge badge-warning" onclick="openContactUs()"> संपर्क करें </button> </small>
+            <small><p class="text-right pr-3"><a target="_blank" href="https://www.mpboardsolutions.com/">&#2309;&#2343;&#2367;&#2325; &#2332;&#2366;&#2344;&#2325;&#2366;&#2352;&#2368;</a></p></small>
          </div>
       </div>
    </div>
