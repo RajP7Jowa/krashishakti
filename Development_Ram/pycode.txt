@@ -1,0 +1,137 @@
+
+'''
+	Read a text file line by line and display each word separated by a #.
+'''
+file=open("c:\test_py\test.txt","r")
+#get absolute path open read only file
+doc=file.readlines()
+for i in doc:
+   words=i.split()
+   for a in words:
+       print(a+"#")
+file.close()
+
+
+
+
+'''
+	Take any text file and find most commonly occurring words
+'''
+count = 0;  
+word = "";  
+maxCount = 0;  
+words = [];  
+
+#Opens a file in read mode  
+file=open("c:\test_py\test.txt","r")
+
+#Gets each line till end of file is reached  
+for line in file:  
+
+    #Splits each line into words  
+    string = line.lower().replace(',','').replace('.','').split(" ");  
+
+    #Adding all words generated in previous step into words  
+    for s in string: 
+        words.append(s);  
+
+#Determine the most repeated word in a file  
+for i in range(0, len(words)):  
+    count = 1;  
+
+    #Count each word in the file and store it in variable count  
+    for j in range(i+1, len(words)):  
+        if(words[i] == words[j]):  
+            count = count + 1;                
+
+    #If maxCount is less than count then store value of count in maxCount  
+    #and corresponding word to variable word  
+    if(count > maxCount):  
+        maxCount = count;  
+        word = words[i];            
+
+print("Most repeated word: " + word);  
+print("Number of time: " + maxCount);  
+file.close(); 
+
+
+'''
+Write a program in python that removes all the lines that contain the character `a' in a file and write it to another file.
+'''
+#to make sure the file is empty
+open("test_res.txt", "w").close()
+
+# make a file object in read mode
+with open("test.txt" , "r") as test_file: 
+	data = test_file.readline()
+   		print(data)
+
+    while(data):
+        if(data.find("a") == -1):
+          # make a file object in write mode  
+          with open("test_res.txt" , "a")as test_file2: 
+                test_file2.write(data+"\n")
+            
+        data = test_file.readline()
+        print(data)
+
+
+
+
+
+’’’
+	Create a text file in Python to store the details(RollNo, Name, Marks accepted at run time) of students
+’’’
+
+#file details 
+myfile = open('xyz.txt', 'w')
+var1 ="RollNo \t Name \t\t Math \t Science \t English \t Computer \t Total \t Percent \n"
+myfile.writelines(var1)
+
+#initially more is 'True' to run the while loop for atleast once
+more = True
+while more==True:
+	'''Taking marks from user for marks'''
+	rollno = input("Enter your Roll number >>>")
+	name = input("Enter your Name >>>")
+	maths_marks = input("Maths marks >>>")
+	science_marks = input("Science marks >>>")
+	english_marks = input("English marks >>>")
+	comupter_marks = input("Computer marks >>>")
+	
+	#total
+	total = int(maths_marks)+int(science_marks)+int(english_marks)+int(comupter_marks)
+	#percent
+	percentage = (total/400)*100
+	print("Save: RollNo.",rollno,", Name", name,", your total marks is",total,"and your percentage is",percentage)
+
+	var1 = rollno+", \t "+name+",\t\t"+math_marks+", \t "+science_marks+", \t "+english_marks+", \t "+computer_marks+", \t "+str(total)+", \t "+percentage+" \n"
+	myfile.writelines(var1)
+
+	'''Save in file Like Spread sheet'''
+	
+	
+	
+	
+	#User have to enter y if he want to run it again
+	a = input("Want to enter more y/n >>>")
+	if a!="y":
+		#if user enters other than 'y' then making 'more' to 'False' to stop the loop. As condition in while will not be satisfied then
+		more = False
+		myfile.close()
+		
+		
+		
+		
+		
+		
+		
+
+
+
+
+
+
+
+
+

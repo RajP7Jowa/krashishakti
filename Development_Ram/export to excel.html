@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style type="text/css">
+        .custom_modal {
+            width: 500px;
+            padding: 20px;
+            background: white;
+            position: fixed;
+            /*top: 300px;*/
+            left: 200px;
+            color: black;
+            display: none;
+            /*border: 1px solid black;*/
+            box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075) !important;
+        }
+
+        ul {
+            list-style-type: disc !important;
+            padding-left: 1em;
+        }
+    </style>
+</head>
+
+<body>
+    <a id="downloadLink" onclick="exportF(this)" >Export to excel</a>
+    <input type="hidden" value="export_pipeline_archive" id="export_csv_table">
+    <table id="example" class="display table" style="width:100%">
+
+        <thead>
+            <tr>
+                <th>Portfolio Company</th>
+                <th>Sector</th>
+                <th>Region</th>
+                <th>Investment Date</th>
+                <th>Amount Invested</th>
+                <th>Investment</th>
+                <th>MC Valuation ($)</th>
+                <th>MC Valuation Type</th>
+                <th>Health</th>
+                <th>Quarterly update</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            <tr>
+                <td>Test company</td>
+                <td>Frontier Fintech</td>
+                <td>Africa</td>
+                <td>2020-02-01</td>
+                <td>$0</td>
+                <td style="text-transform: capitalize;"></td>
+                <td style="background:#92d050 !important" ;>
+                    $0 </td>
+                <td style="background:#92d050 !important" ;>
+                    Follow on Convertible Round(no valuation) </td>
+                <td style="background:#ff0000 !important" ;>
+                    Poor </td>
+                <td class="quarterly_hover" id="0" onmouseenter="showModal(this.id,event);" onmouseleave="removeModal(this.id);">
+                    <div id="custom_modal_con0" class="quaterlyoverflow">- 2020 Q1 Quarterly notes to check if they show up<br />
+                        - 2020 Q1 Quarterly notes second row to demonstrate problem<br />
+                        - 2020 Q1 Quarterly notes third row to demonstrate problem</div>
+                    <div id="custom_modal0" class="custom_modal"></div>
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+    <script>
+        function showModal(id, event) {
+            var modal_Con = document.getElementById("custom_modal_con" + id).innerHTML;
+            var modal = document.getElementById("custom_modal" + id);
+            var x = event.clientX;
+            var y = event.clientY;
+            var custom_top = (y - 100) + "px";
+            var custom_right = (x - 500) + "px";
+            // console.log(x);
+            // alert(modal_Con.replace(/\s+/g, " ").trim());
+            if (modal.innerHTML = modal_Con) {
+                modal.setAttribute("style", "display:block;top:" + custom_top + ";left:" + custom_right);
+            } else {
+                return false;
+            }
+        }
+
+        function removeModal(id) {
+            var modal = document.getElementById("custom_modal" + id);
+            modal.style.display = "none";
+            modal.innerHTML = '';
+        }
+
+        function exportF(elem) {
+            var table = document.getElementById("example");
+            var html = table.outerHTML;
+            var url = 'data:application/vnd.ms-excel,' + escape(html); // Set your html table into url 
+            elem.setAttribute("href", url);
+            elem.setAttribute("download", "export.xls"); // Choose the file name
+            return false;
+        }
+    </script>
+    </script>
+</body>
+
+</html>

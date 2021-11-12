@@ -1,0 +1,2592 @@
+#################phalcon###############
+ControllerBase
+?php
+
+use Phalcon\Mvc\Controller;
+use Phalcon\Mvc\Dispatcher;
+
+class ControllerBase extends Controller
+{
+    public function initialize()
+    {
+        $this->view->appUrl = $this->config->application->baseUri;
+        $this->view->utility = new UtilityController;
+    }
+
+    public function beforeExecuteRoute(Dispatcher $dispatcher)
+    {
+        $domain = $_SERVER['SERVER_NAME'];
+        // Assuming domain name is TLD ie., .in , .com .net. This means that subdomain will have 3 arguments.
+        // If it's a cTLD then this algorithm will be changed
+        // Checking to see if a subdomain is supplied or not
+        $subdomain = explode(".",$domain);
+        if(count($subdomain)>2){
+            $this->cookies->set('subdomain', $subdomain[0], time() + 30 * 86400);
+        }
+        // Executed before every found action
+        if ($this->request->get("token")) {
+            $this->view->disable();
+            $this->verifyToken($this->request->get("token"), $this->request->get("id"), $dispatcher->getControllerName(), $dispatcher->getActionName());
+        } else {
+            //checkAcl function for session checking
+            $this->checkAcl($dispatcher->getControllerName(), $dispatcher->getActionName());
+        }
+    }
+
+    private function defineAcl()
+    {
+        // Allow array
+        return $acl = array(
+            "superadmin" => array(
+                "admin/*",
+                "index/*",
+                "utility/*",
+                "test/*",
+                "authorization/*",
+                "events/*",
+                "eventscontact/*",
+                "session/*",
+                "speaker/*",
+                "linkspeaker/*",
+                "utility/*",
+                "sessionquery/*",
+                "api/*",
+            ),
+            "siteadmin" => array(
+                "eventsmanager/*",
+                "utility/*",
+                "test/*",
+                "authorization/*",
+                "events/*",
+                "eventscontact/*",
+                "session/*",
+                "speaker/*",
+                "linkspeaker/*",
+                "sessionquery/*",
+            ),
+            "eventmanager" => array(
+                "eventsmanager/*",
+                "utility/*",
+                "test/*",
+                "authorization/*",
+                "eventscontact/*",
+                "session/edit",
+                "session/index",
+                "session/trackFetchThroughSession",
+                "speaker/edit",
+                "speaker/index",
+                "linkspeaker/*",
+                "sessionquery/*",
+            ),
+            "user" => array(
+                "useraccess/*",
+                "authorization/*",
+                "utility/*",
+            ),
+            "guest" => array(
+                "authorization/*",
+                "utility/forbidden",
+                "utility/notfound",
+                "api/*",
+
+            ),
+        );
+    }
+
+    private function checkAcl($controller, $action)
+    {
+        $type = $this->session->get("type");
+        empty($type) ? $type = "guest" : true;
+        $acl = $this->defineAcl();
+        if (!((in_array($controller . "/" . $action, $acl[$type])) || (in_array($controller . "/*", $acl[$type])))) {
+            $this->dispatcher->forward(
+                [
+                    "controller" => "utility",
+                    "action" => "forbidden",
+                ]
+            );
+        }
+    }
+
+    private function verifyToken($token, $id, $controller, $action)
+    {
+        $foundUser = Users::find([
+            "conditions" => "id = ?1",
+            "bind" => [
+                1 => $id,
+            ],
+        ]);
+        if (sha1(($foundUser[0]->email) . ($foundUser[0]->password)) == $token) {
+            /**
+             * User Verified Automatically directed to given url
+             */
+
+        } else {
+            /**
+             * User Not Verified here
+             * return a json with status "failure"
+             */
+            echo json_encode(array("status" => "failure", "message" => "Un Authorized User"));
+        }
+    }
+    public function getitemfilepath($type)
+    {
+        //  ["sessiontrack", "persons", "banner"];
+        return $this->config->metadata->fileUploadPath . $type . "/";
+    }
+}
+/**
+if ($type == 'siteadmin' || $type == 'eventmanager') {
+if (!$this->cookies->has('eventId')) {
+//  $this->response->redirect("utility/EventNotAvailable");
+$acl = $this->defineAcl();
+if (!((in_array($controller . "/" . $action, $acl[$type])) || (in_array($controller . "/*", $acl[$type])))) {
+$this->dispatcher->forward(
+[
+"controller" => "utility",
+"action" => "EventNotAvailable",
+]
+);
+}
+}
+}
+ */
+
+
+
+
+
+public function getEventBannerImage()
+    {
+        $subdomain = $this->cookies->get('subdomain')->getValue();
+        $cookies = new UtilityController();
+        $eventid = $this->getEventCookie();
+
+        try {
+            if ($eventid) { //Event Cookies is Set
+                $eventData = Event::find([
+                    "conditions" => "id = ?1",
+                    "bind" => [
+                        1 => $eventid,
+                    ],
+                    "columns" => "banner",
+                ]);
+            } else { //Event Cookies is Not Set
+                $eventData = Event::find([
+                    "conditions" => "subdomain = ?1",
+                    "bind" => [
+                        1 => $subdomain,
+                    ],
+                    "columns" => "banner",
+                ]);
+            }
+            if (count($eventData) > 0) {
+                $filePath = $this->getitemfilepath('banner');
+                $fileName = ($eventData[0]->banner != '' || $eventData[0]->banner != null) ? $eventData[0]->banner : 'defaultbanner.jpg';
+                return (file_exists($filePath . $fileName)) ? $fileName : 'defaultbanner.jpg';
+            } else {
+                return 'defaultbanner.jpg';
+            }
+        } catch (Exception $e) {
+            $this->logger->critical("[UTILITY] Fetch Exception - get Event banner- " . $e->getMessage());
+            return 'defaultbanner.jpg';
+        }
+    }
+    public function getEventName()
+    {
+        $eventid = $this->getEventCookie();
+        try {
+            $eventData = Event::find([
+                "conditions" => "id = ?1",
+                "bind" => [
+                    1 => $eventid,
+                ],
+                "columns" => "id,title",
+            ]);
+            if(count($eventData) != 0){
+                return ($eventData[0]->title!='') ? $eventData[0]->title : 'UnKnown Event';
+            }else{
+                return 'UnKnown Event';
+            }
+        } catch (Exception $e) {
+            $this->logger->critical("[UTILITY] Fetch Exception - get Event Name - " . $e->getMessage());
+            return 'UnKnown Event';
+        }
+    }
+
+
+##########/.pahlcon####################
+
+Power
+===========
+** on, off, reboot Exception message : Power operation failed !, Please try again or open a ticket if problem persists.
+
+Network
+============
+   ** traffic graph Exception: Traffic Graph Unavailable, Please check later or change filter
+   ** api curl fail traffic: Traffic Data Unavailable, Please check later or change filter
+
+   ** Network status uplink Exception: Couldn't determine network status uplink, Please try again
+   ** curl fail for Network status: Couldn't determine network status, Please try again
+
+   ** null route block/unblock ip list Exception: Couldn't block IP Address at this time, Please open a ticket
+   ** curl fail : Server unreachable, Please try later or open a support ticket
+
+OS reinstall 
+==============
+    os list response Exception: Couldn't fetch available OS, Please open a support ticket or try again
+    curl api for os list Exception: Couldn't fetch available OS, Please open a support ticket or try again
+
+    os response for reinstall Exception: Reinstall failed, Please open a support ticket at the earliest
+    curl api response fail: Network Unreachable, Please try again later.
+
+    restall status checking Exception : Reinstall failed, Please open a support ticket at the earliest
+    curl fail for check status: Network Unreachable, Please try again later.
+
+
+IP list
+===========
+    curl fail: Couldn't fetch available IP List, Please try again
+
+rDNS
+===========
+    curl api fail: rDNS Update Server failed, Please try again or open a support ticket
+    Exception: rDNS Update Server failed, Please try again or open a support ticket
+
+    update rDNS setting Exception: rDNS Update Server failed, Please try again or open a support ticket
+    rDNS curl fail: rDNS Update Server failed, Please try again or open a support ticket
+
+
+Overview
+=====================
+    Exception of Any Overview: Couldn't connect to Server, Please try again
+    curl fail for Network: Couldn't connect to Server, Please try again
+
+    custom fields fail for fetching records: Couldn't connect to Server, Please try again
+    and Exception: Couldn't connect to Server, Please try again
+
+
+
+################ Install Apache ubuntu 20.04 focal #####################
+
+
+►Installation Steps with all required commands – 
+
+Update apt tool either by 
+1) Software updater
+2) Through terminal
+ sudo apt update
+Enter your System root password
+ sudo apt upgrade
+Press Y to continue
+CHECK once again by entering following commands
+sudo apt update
+sudo apt upgrade
+sudo apt autoremove
+Press Y to continue
+Don’t forget to reset machine and verify again
+
+Step -1. 
+Install Apache Web Server on ubuntu 20.04 LTS :
+ sudo apt install apache2 -y
+
+CHECK : Whether Apache web server is successfully installed or not
+So, goto browser and type anyone form following in address bar 
+http://localhost/
+http://127.0.0.1/so
+http://your_machine_ip_address/
+
+Enable firewall settings by following commands :
+sudo ufw status
+sudo ufw enable
+sudo ufw app list
+sudo ufw allow in "Apache Full"
+
+Step - 2 
+Install mysql-server on ubuntu 20.04 LTS :
+ sudo apt install mysql-server
+press Y to continue
+CHECK : Login mysql with root user without password with sudo
+ sudo mysql
+
+create database db_name;
+use db_name;
+select database();
+exit
+
+Step - 3.
+Install php and its required libraries:
+ sudo apt install php php-mysql libapache2-mod-php   
+Press Y to continue
+ php -v
+
+Create one sample php file in Apache Web server root directory 
+ cd /var/www/html
+ sudo gedit file_name.php
+
+Goto browser and run
+        http://localhost/file_name.php
+
+PERMISSION for apache root directory
+ sudo chown -R $USER:$USER /var/www/html
+
+To enable right click - new document
+ touch ~/Templates/Empty Document
+
+Create a php file without sudo through terminal using gedit
+ gedit file_name.php
+
+Goto browser and run
+        http://localhost/file_name.php
+
+
+Step - 4.
+Install PHPMyAdmin
+ sudo apt update
+ sudo apt install php-mbstring php-zip php-gd php-json php-curl
+Press Y to continue
+ sudo apt install phpmyadmin
+Press Y to continue
+Select Apache2 by pressing space and then press tab and OK
+Press Yes and set password for dummy user phpMyAdmin
+ sudo systemctl restart apache2
+
+CHECK : Whether phpMyAdmin is successfully installed or not
+So, goto browser and type  
+        http://localhost/phpmyadmin
+Default user name : phpMyAdmin
+And enter your password
+
+
+sudo apt update
+Set root password and create a new database user with full privileges
+ sudo mysql
+ SELECT user,authentication_string,plugin,host FROM mysql.user;
+ ALTER USER ‘root’@‘localhost’ IDENTIFIED WITH caching_sha2_password BY ‘password’;
+ SELECT user,authentication_string,plugin,host FROM mysql.user;
+ exit
+ sudo mysql -p
+Enter your password
+ CREATE USER ‘new_user’@‘localhost’ IDENTIFIED WITH caching_sha2_password BY ‘password’; 
+ GRANT ALL PRIVILEGES ON *.* TO ‘new_user’@‘localhost’ WITH GRANT OPTION;
+ exit
+
+
+Once again
+ sudo systemctl restart apache2
+ sudo systemctl restart mysql
+
+Goto web browser and type
+        http://localhost/phpmyadmin
+Enter new user name and password
+And create some databases, table and execute some queries through GUI
+
+
+
+# git install 
+$ sudo apt install git-all
+
+
+
+
+################/.Install Apache ubuntu 20.04 focal #####################
+
+############ c++ Boost configuration ################
+/*before use boost libraries use to download or install boost libraries use :
+     sudo apt-get install libboost-all-dev
+*/
+
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
+// https://www.boost.org/doc/libs/1_41_0/doc/html/boost_propertytree/accessing.html
+#include <iostream>
+
+using boost::property_tree::ptree;
+ptree pt;
+/*config file name*/
+const char* config_file_name ="config.ini";
+
+/** input symbol name and return current revers number 
+ * input    : Symbol, value
+*/
+int stringToInt(std::string string_val){
+    char number[string_val.size() + 1];
+    strcpy(number, string_val.c_str());
+    return atoi(number);
+}
+
+void put_config(std::string textOutput, int value){
+    std::string status="status.";
+    status.append(textOutput);
+    char key[status.size() + 1];
+    strcpy(key, status.c_str());
+    boost::property_tree::ini_parser::read_ini(config_file_name, pt);
+    
+    int reverse_order_limit = pt.get<int>("setting.reverse_order_limit",5);
+    /*check reverse_order_limit value if not then set 5*/
+    pt.put("setting.reverse_order_limit", reverse_order_limit);
+    
+    /*update value*/
+    pt.put(key, value);
+    write_ini(config_file_name, pt );
+}
+
+
+/** input symbol name and return current revers number 
+ * input    : Symbol
+ * output   : int  
+*/
+int get_status(std::string textOutput){
+    std::string status="status.";
+    status.append(textOutput);
+    std::cout<<status<<std::endl;
+    // char symbol[status.size() + 1];
+    // strcpy(symbol, status.c_str());
+
+    boost::property_tree::ini_parser::read_ini(config_file_name, pt);
+    return (pt.get<int>(status,0));
+}
+int main()
+{
+    // put_config("ABB",45);
+    put_config("ANN",46);
+    char bb[] = "ABB";
+    // std::cout<< get_status(bb) << std::endl;
+    std::cout<< get_status("ANN") << std::endl;
+}
+
+############ /.boost config ##########################
+
+
+
+
+
+Android Cross Compile Kivy
+---------------------------
+sudo apt update
+sudo apt install -y git zip unzip openjdk-8-jdk python3-pip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+pip3 install  --upgrade Cython==0.29.19
+export PATH=$PATH:~/.local/bin/
+cd <appFolder>
+buildozer init
+sudo nano buildozer.spec
+buildozer -v android debug
+
+Icon KIvyMD
+-----------
+https://materialdesignicons.com/
+
+Terminal theme zsh
+-----------------------
+sudo apt install zsh
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.oh-my-zsh
+cp ~/.oh-my-zsh/templates/zshrc.zsh-template ~/.zshrc
+chsh -s $(which zsh)
+
+
+Couchdb install
+=================
+sudo apt update && sudo apt install -y curl apt-transport-https gnupg
+curl https://couchdb.apache.org/repo/keys.asc | gpg --dearmor | sudo tee /usr/share/keyrings/couchdb-archive-keyring.gpg >/dev/null 2>&1
+source /etc/os-release
+echo "deb [signed-by=/usr/share/keyrings/couchdb-archive-keyring.gpg] https://apache.jfrog.io/artifactory/couchdb-deb/ ${VERSION_CODENAME} main" \
+| sudo tee /etc/apt/sources.list.d/couchdb.list >/dev/null
+
+sudo apt update
+sudo apt install -y couchdb
+
+to check
+----------
+http://localhost:5984/
+
+
+RabbitMq Install
+==================
+https://www.rsupernova.com/how-to-install-and-manage-rabbitmq-on-ubuntu-20-04/
+
+sudo service rabbitmq-server status
+sudo rabbitmqctl add_user admin z9178
+sudo rabbitmqctl set_user_tags admin administrator
+sudo rabbitmqctl list_permissions
+
+http://localhost:15672/
+
+
+MOngoDB Install ubuntu 
+https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/
+mongo db
+========
+ sudo systemctl start mongod
+ sudo systemctl status mongod
+ sudo systemctl enable mongod
+ sudo systemctl restart mongod
+
+contection start
+--------------
+ mongo --port 27017 -u "root" -p "z9178" --authenticationDatabase "admin"    
+
+
+
+PYTHON installation pip and vertual enviroment
+==============================================
+apt install python3-pip
+apt install python3.8-venv
+pip install -r requirements.txt
+
+
+
+//////////////
+formatting number with comma aur js
+givenNumber.toLocaleString('en-US')
+
+
+# remove number float from string js
+
+parseFloat(" $10 ".replace(/[^0-9.-]+/g, '')
+
+//mysql timestamp to date 
+SELECT id, name, abbreviation, basePrice, DATE_FORMAT(FROM_UNIXTIME(checkInTime), '%d-%m-%Y') AS 'date_formatted', checkOutTime FROM room_type WHERE 1
+
+
+// click on tab table responsives 
+$('a[data-toggle="tab"]').on('shown.bs.tab', function(e) {
+    tableObj.columns.adjust()
+    tableObj.responsive.recalc();
+  });
+  
+// if err != nil {
+// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+// 	return nil
+// }
+
+
+///// datatable responsive package yarn 
+https://yarnpkg.com/package/drmonty-datatables-responsive
+css "./node_modules/drmonty-datatables-responsive/css/dataTables.responsive.min.css",
+js 
+
+
+******************go sting split
+aa := []string{"one","tow","four","five","six"}
+strings.Join(aa[:], ",") //array to string with comma seprate
+
+s := strings.Split(aa, ",") //comma sep string to array
+fmt.Printf("%v---%T",s ,s)
+
+
+
+-------------go key valu on interface -----------------
+	getUsersAppInfo := map[string]interface{}{ "appId": 2, "fcmServerKey": "keyTestTest", "name": "com.app"}
+
+	// loop over elements of slice
+	for k, v := range getUsersAppInfo {
+		fmt.Println(k, "value is", v)
+	}
+	
+	//template : {{ range $flashkey, $flashdata := . }}
+
+------------------------------------
+
+-----------Go land template condition----------
+{{ if (eq .Type "success") }}
+      ------------------success--------------
+      {{ else if (eq .Type "warning") }}
+      ----------------warning--------------
+      {{ else if (eq .Type "danger") }}
+      ----------------danger--------------
+
+      {{ else }}
+      ----------------default--------------
+      {{ end }}
+
+------------------
+
+************
+kill process of tcp on go:$ sudo kill -9 $(sudo lsof -t -i:4000)
+
+find reak* -type d -exec chmod 777 {} \+
+find reak* -type f -exec chmod 777 {} \+
+
+UNIX sql restart:-	sudo /etc/init.d/mysql restart   
+mysql Create New User 'reak'@'localhost' IDENTIFIED BY 'reak'
+mysql > GRANT ALL PRIVILEGES ON * . * TO 'reak'@'localhost';
+
+$('html, body').animate({ scrollTop: $('#'+chatId+' ul').offset().top }, 'slow');
+   
+    
+    $('html, body').animate({ scrollTop: $('#'+chatId+' ul').offset().top }, 'slow');
+
+
+*USEFUL LINK *
+Can i Use https://caniuse.com/
+Live Amchart https://live.amcharts.com/
+BulmaCss https://bulma.io/documentation/
+Minifier http://minifycode.com/html-minifier/
+HTML beautifier http://minifycode.com/html-beautifier/
+Asana : https://app.asana.com
+Calculation Meth : www.alcula.com/calculators/statistics/variance/
+Calculation Meth : https://www.calculator.net/ (edited) 
+
+
+????????????
+window reload without cache           window.location = window.location.href.split('&')[0]+'&eraseCache=true';
+
+?????????
+
+/* phalcon get Controller name and action name */
+echo $this->view->c_name = $this->router->getControllerName();
+echo $this->view->a_name = $this->router->getActionName();
+/***/
+
+
+<><><><><><>< Bing MAP ><><><><><><>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-core.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-service.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-ui.js"></script>
+    <script type="text/javascript" src="https://js.api.here.com/v3/3.0/mapsjs-mapevents.js"></script>
+    // app_id: 'CnlkaugYJZd35lqrDS1n',       app_code: 'Rbkkw03RMUwJ_BTilfnCgQ',
+ 
+/** map start
+ * Moves the map to display over Berlin
+ *
+ * @param  {H.Map} map      A HERE Map instance within the application
+ */
+
+function moveMapToBerlin(map){
+    map.setCenter({lat:52.5159, lng:13.3777});
+    map.setZoom(14);
+  }
+
+  //Step 1: initialize communication with the platform
+  var platform = new H.service.Platform({
+      app_id: 'CnlkaugYJZd35lqrDS1n',
+      app_code: 'Rbkkw03RMUwJ_BTilfnCgQ',
+      useHTTPS: true
+  });
+  var pixelRatio = window.devicePixelRatio || 1;
+  var defaultLayers = platform.createDefaultLayers({
+    tileSize: pixelRatio === 1 ? 256 : 512,
+    ppi: pixelRatio === 1 ? undefined : 320
+  });
+  
+  //Step 2: initialize a map  - not specificing a location will give a whole world view.
+  var map = new H.Map(document.getElementById('reak_map'),
+    defaultLayers.normal.map, {pixelRatio: pixelRatio});
+  
+  //Step 3: make the map interactive
+  // MapEvents enables the event system
+  // Behavior implements default interactions for pan/zoom (also on mobile touch environments)
+  var behavior = new H.mapevents.Behavior(new H.mapevents.MapEvents(map));
+  
+  // Create the default UI components
+  var ui = H.ui.UI.createDefault(map, defaultLayers);
+  
+  // Now use the map as required...
+  moveMapToBerlin(map);
+  
+
+// Define a callback function to process the geocoding response:
+var onResult = function (result) {
+    var locations = result.Response.View[0].Result,
+        position,
+        marker;
+    // Add a marker for each location found
+    for (i = 0; i < locations.length; i++) {
+        position = {
+            lat: locations[i].Location.DisplayPosition.Latitude,
+            lng: locations[i].Location.DisplayPosition.Longitude
+        };
+        marker = new H.map.Marker(position);
+        map.addObject(marker);
+    }
+};
+
+// Get an instance of the geocoding service:
+var geocoder = platform.getGeocodingService();
+
+// Call the geocode method with the geocoding parameters,
+// the callback and an error callback function (called if a
+// communication error occurs):
+geocoder.geocode(geocodingParams, onResult, function (e) {
+    alert(e);
+});
+
+// map end
+
+<><><><><><><><><><><><><><><><><><>
+>>>>>>>>> Mysqli Auto increment and Primary Key >>>>>>>>>>
+ALTER TABLE `expenses` ADD PRIMARY KEY(`id`);
+ALTER TABLE `expenses` CHANGE `id` `id` INT(11) NOT NULL AUTO_INCREMENT;
+>>>>>>>>>>>>>>>>>>..
+//////////////************ Java Script With Associative array *****************////////
+   var o = new Object();
+o["one"] = ['1'];
+o["one"].push('3');
+o["one"].push('4');
+o["two"] = 2;
+o["three"] = 3;
+console.log(JSON.stringify(o));
+for(var i in o)
+{
+     document.write(i + "=" + o[i] + '<br>');
+}
+/////////////////////////////////
+
+
+######### PYTHON ############
+from bs4 im BeautifulSoup
+import urllib.request
+
+
+def getHtml(url):
+    fp = urllib.request.urlopen(url)
+    content = fp.read()
+    content = content.decode("utf8")
+    fp.close()
+    return content
+
+date_val=''
+time_val=''
+def pushElementTr(val):
+    # print(val)
+    soup = BeautifulSoup(val)
+    count=1
+    thislist = []
+    global date_val
+    global time_val
+    for otherData in soup.find_all("td",class_="calendar__cell"):
+        # print(count)
+        # FOR DATE
+        if count == 1 and len(otherData.text) == 1:
+            # DATE VALUE INITIALIZE WITH NULL VALUE
+            thislist.append(date_val)      
+        elif count == 2 and len(otherData.text) == 1:
+            # DATE VALUE INITIALIZE WITH NULL VALUE
+            thislist.append(time_val)    
+        elif count == 3 and soup.find_all("div", class_="calendar__impact-icon--screen"):  
+            if (soup.find_all("span", class_="low")):
+                # print('low')
+                thislist.append('low')      
+            if(soup.find_all("span", class_="high")):
+                thislist.append('high')      
+                # print('high')
+        else:
+            if count == 1 :
+                date_val = otherData.text
+            if count == 2 :
+                time_val = otherData.text
+            # print(count, len(otherData.text))
+            thislist.append(otherData.text)      
+        # print(otherData.prettify())
+        count= count+1 
+        # print(date_val)
+    return thislist
+
+content = getHtml("http://localhost/GIT/scraper-pb/demo.html")
+soup = BeautifulSoup(content)
+a=1
+thislistfinal = []
+for tmp in soup.find_all("tr",class_="calendar__row--grey"):
+    val = tmp.prettify()
+    resultRow = pushElementTr(val)
+    thislistfinal.append(resultRow)      
+    a=a+1
+    if a == 10:
+        break
+
+#all records print(thislistfinal)
+
+for idx, val in enumerate(thislistfinal):
+    val = [w.replace('\n', '') for w in  val]
+    val = [w.replace(' ', '') for w in  val]
+    for idx, val1 in enumerate(val):
+        print(idx, val1)
+    print('\n')
+
+####################
+
+
+/** SQL FOregn key */
+	CONSTRAINT `EbayPurchaseHistory_ibfk_1` FOREIGN KEY (`Url`) REFERENCES `EbayHotDeals` (`Url`)
+/**/
+
+
+
+/************inotify.max_user_watches *****/
+sudo sysctl fs.inotify.max_user_watches=524288
+/************inotify.max_user_watches *****/
+
+<!------@@@@@ font Animating Icons Fontawesome.@@@@@ 
+<div class="fa-3x">
+  <i class="fas fa-spinner fa-spin"></i>
+  <i class="fas fa-circle-notch fa-spin"></i>
+  <i class="fas fa-sync fa-spin"></i>
+  <i class="fas fa-cog fa-spin"></i>
+  <i class="fas fa-spinner fa-pulse"></i>
+  <i class="fas fa-stroopwafel fa-spin"></i>
+</div>
+
+---->	
+
+/* Check Error List */
+$CreateQuery->create(); //Create Funtion
+$messages = $CreateQuery->getMessages();
+foreach ($messages as $message) {
+    echo $message, "\n";
+}
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+last sunday and next sunday timestamp
+echo date('Y-m-d', strtotime('last/next Sunday', strtotime(date('Y-m-d'))));
+
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+/********************//
+
+
+100% working
+SELECT monthname(timestamp) as month, COUNT(*) as inquiry
+            ,sum(CASE WHEN scheduled  like 'yes' THEN 1 ELSE 0 END) as scheduled
+            ,sum(CASE WHEN noShow = 1 THEN 1 ELSE 0 END) AS noShow
+            ,sum(CASE WHEN noShow = 0 THEN 1 ELSE 0 END) as shows
+            ,sum(CASE WHEN bookedSurgery = 1 AND schedule LIKE 'yes' THEN 1 ELSE 0 END) as booking
+            From (surgicalInquiry)
+            WHERE YEAR(timestamp) = :selectedYear
+            GROUP BY monthname(timestamp),month(timestamp)
+            order by month(timestamp)
+
+/////****************///////
+
+/**** save or Create throug object and array***///
+$eventRecord = new Event;
+$done = $eventRecord->save((array) $json_data);
+$done = $eventRecord->save($object);
+$success .= ($done) ? null : ' Event, ';
+
+
+/* Check All POST Request */
+print_r($this->request->getPost());
+
+/*date convert phalcon timestapm**/
+public function convertdate($timestamp)
+    {
+        // {{utility.convertdate(eventdaterange.endingdate)}}
+        return date('Y-m-d', $timestamp);
+    }
+
+/****  data of January 1 to 3 year before **/
+  $cYear = date('Y');
+    $date = strtotime($cYear . '-01-01');
+    $to_year = date("Y-m-d", $date);
+    $from_year = date('Y-m-d', strtotime(" - 3 year",$date));
+    echo 'from : '.$to_year . '- to :'.$from_year;
+/****  data of January 1  **/
+
+   #######start dd/mm/yyyy to timestamp
+    $get_date_dmy = '22/10/2018';
+    $timestamp = strtotime(implode('-',explode('/',$get_date_dmy)));
+    #end dd/mm/yyyy to timestamp
+    echo "<em> dd/mm/yyyy </em> ".$get_date_dmy." &nbsp; &nbsp; &nbsp; to <em> mm/dd/yyyy </em>". date('m/d/Y' , $timestamp);
+ #end dd/mm/yyyy to timestamp
+
+//****  delete file *******/
+$filesdelete = glob($path . '.*');
+foreach ($filesdelete as $filedel) {
+    unlink($filedel);
+}
+//****  delete file *******/
+/*File Uplaoding*/
+$request = new Phalcon\Http\Request();
+if ($request->hasFiles(true) == true) {
+    $i = 0;
+    $array = ["sessiontrack", "persons", "banner"];
+    foreach ($request->getUploadedFiles() as $file) {
+        $type = $array[$i]; //sessiontrack", "persons", "banner"
+        $eventData->$type = $array[$i] . '-' . $eventData->id . '.' . $file->getExtension(); //Update on Database
+        $uploaddon = $file->moveTo($this->getitemimagepath($type) . $eventData->$type);
+        $i++;
+        if ($uploaddon) {
+            $this->logger->critical('[AddEvents] Files Not be Uploaded,' . $eventData->$type);
+        }
+    }
+}
+$eventData->update();
+/*SQL rollback*/
+$this->db->begin();
+$this->db->commit();
+$this->db->rollback();
+/* Delelte all Subdirectory and file in Corrent Directory */
+rrmdir($filename);
+function rrmdir($dir) { 
+    if (is_dir($dir)) { 
+      $objects = scandir($dir); 
+      foreach ($objects as $object) { 
+        if ($object != "." && $object != "..") { 
+          if (is_dir($dir."/".$object))
+            rrmdir($dir."/".$object);
+          else
+            unlink($dir."/".$object); 
+        } 
+      }
+      rmdir($dir); 
+    } 
+  }
+
+
+/* tmpl if else*/
+ *% if (o.content[item].mac ==1) { %*
+                <em>Yes</em>
+            *% } else { %*
+                <em>No</em>
+            *% } %*
+
+/*Check Box change use JQuery */
+var checked = ($(this).is(":checked")) ? 1 : 0; // Find Status
+
+				 if (checked == 1) { // Status Of Check BOx
+                                    $("#"+type).prop("checked", false);
+                                } else {
+                                    $("#"+type).prop("checked", true);
+                                }
+/***Jquery change name*/
+ $(this).attr('name', 'new_name');
+
+
+
+/*Sort alphanumberic Order* /
+
+SELECT `alphanumericCol` FROM `tableName` ORDER BY SUBSTR(`alphanumericCol` FROM 1 FOR 1), LPAD(lower(`alphanumericCol`), 10,0) ASC 
+output
+_______
+100
+101
+102
+104
+S-104A
+S-105
+S-107
+S-108
+S-109
+S-11
+S-110
+S-113
+S-114
+S-115
+
+/*Time Sort AM PM */
+ORDER BY SUBSTR( `linkspeaker`.`starttime` FROM -2 FOR 2), LPAD(lower( `linkspeaker`.`starttime`), -10,0) ASC 
+/*str to date with format mysqli/	
+MONTH(STR_TO_DATE(NotaryDate, '%d/%m/%Y'))
+
+***/////chart lenght 
+SELECT dashboardId, CHAR_LENGTH(data) FROM `dashboard` WHERE 1 
+
+/** replace name *//
+UPDATE google_sheet_data 
+SET 
+    NotaryDate = REPLACE(NotaryDate,
+        '2016',
+        '2018')
+
+
+/* Curl Request to read other site data  and save*/
+  $urladdress = "http://event.local/api/export?eventId=80";
+            //$urladdress = "http://event.local/api/export?eventId=" . $this->request->get("eventid");
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $urladdress);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            $eventData = curl_exec($ch);
+            $json_data = json_decode($eventData);
+            $json_data = $json_data->eventRecord;
+            print_r($json_data);
+            //$this->db->begin(); //begin
+            $eventDataSave = new Event;
+
+            $done = $eventDataSave->save((array)$json_data);
+
+
+ if ($nonSurgicalInquiry->create($this->request->getPost())) 
+/*Volt IN Key word*/            
+  {%if dataindex.event_uid in offlineEventId %}
+
+/*Alert Message*/
+Fetching records failed, Please try again !
+
+-- has been successfully added,
+Record has been updated successfully !
+Record was successfully deleted !
+
+
+Record couldn't be added to the system, Please try again.
+Record couldn't be updated, Please try again !
+Record couldn't be deleted, Please try again !
+
+Date provided for session doesn't fall in Event duration
+There are no more contacts available to delete 
+System cookies couldn't be saved, Please enable cookies in browser.
+
+
+/*looping start date to end date increment 1 day*/
+  echo date("Y-m-d", $startingdate) . '<br>';
+                echo date("Y-m-d", $endingdate) . '<br>';
+
+                $start_date = $startingdate;
+                $sessionData=array();
+                while ($start_date < $endingdate) {
+                    $start_date = strtotime("+1 day", $start_date);
+                    echo date("Y-m-d", $start_date) . '<br>';
+                    
+                }
+/** read first line of file*/
+        $dir ='/home/reak/Server/GIT/conference-manager-local/';
+        $file = $dir."roomName.txt";
+        $f = fopen($file, 'r');
+        $line = fgets($f);
+        $room ='%'.trim($line).'%';
+        fclose($f);
+
+
+/**JQuery local Storoage **/
+localStorage.setItem(keyString,value);
+localStorage.getItem(keyString);
+localStorage.removeItem(key);
+/**JQuery Refresh After 5 Min  **/
+ window.setInterval(function(){
+  /// call your function here
+}, 5000);
+
+
+/****Asycronuss javaScript Node.js*/
+     function downloadBanner(BannerData) {
+                var BannerDownload = new Promise(function(resolve, reject) {
+                    const fs = require("fs");
+                    const download = require("download");
+                    var path = config.meta.fileUrl + "banner/" + BannerData.event.banner;
+                    download(path, "downloads").then(() => {
+                        resolve(true);
+                    });
+                });
+                return BannerDownload;
+            }
+
+       var promise1 = new Promise(function(resolve, reject) {
+                            var doneBanner = downloadBanner(jsonData);
+                                doneBanner.then(function() {
+                                    resolve(true);
+                                });
+                            });
+                            var promise2 = new Promise(function(resolve, reject) {
+                                var doneBreakSlide = downloadFileBreakSlide(jsonData);
+                                resolve(true);
+                            });
+                            var promise3 = new Promise(function(resolve, reject) {
+                                var doneFile = downloadFile(jsonData);
+                                resolve(true);
+                            });
+
+                            Promise.all([promise1, promise2, promise3]).then(function(value) {
+                                // expected output: "Success!"
+                                var Event_JSon_load = localStorage.getItem("load");
+                                if (Event_JSon_load != 'yes') {
+                                    console.log(' load '+Event_JSon_load);
+                                    element.classList.remove("loading");
+                                    refreshInfo();
+                                }
+                            });
+
+
+var promise1 = new Promise(function(resolve, reject) {
+      if (active != "1") {
+        // Status Of Check BOx
+        $("#active").prop("checked", false);
+      } else {
+        $("#active").prop("checked", true);
+      }
+      $("#name").val(cName);
+      $("#modalTitle").html("County Update");
+      // $("#countyId").val(countyId);
+      $("#countyId").attr("onclick", "countyUpdate('" + countyId + "')");
+      resolve(true);
+    });
+    promise1.then(function(value) {
+      modal.modal("show");
+    });
+
+//////////////////Use Json and Ajax and tmpl start ////////////////////////
+/*php*/
+
+   public function countyIndexRecordAction()
+    {
+        $this->view->setRenderLevel(\Phalcon\Mvc\View::LEVEL_ACTION_VIEW);
+        try {
+            $conn = $this->db;
+            $sql = "SELECT sess.sessionid 'session_textid',sess.eventid 'event_uid', sess.id 'session_uid', sess.title,sess.sessiondate,sess.sessiontime,sess.room,sess.building, event.eventmac,event.eventars,event.eventpanel,event.eventmodereto, presentation.*, count(usf.id) 'filecount' FROM linkspeaker presentation INNER JOIN event event ON presentation.eventid= event.id INNER JOIN speaker person ON presentation.speakerid= person.id INNER JOIN session sess ON presentation.sessionid = sess.id LEFT JOIN userfile usf ON (usf.presentationid = presentation.id) WHERE presentation.speakerid=:speaker_id GROUP by presentation.id ORDER BY sess.sessiondate DESC, SUBSTR( sess.sessiontime FROM -2 FOR 2) ASC,SUBSTR( presentation.starttime FROM -2 FOR 2) ASC ";
+            $row = $conn->prepare($sql);
+            $UserId = $this->session->get("speakerid");
+            $row->bindParam(':speaker_id', $UserId);
+            $row->execute();
+            $this->view->dasboradData = $row->fetchAll(\Phalcon\Db::FETCH_OBJ);
+            $offlineEventF = Event::find([
+                "flag=1",
+                "columns" => "id",
+            ]);
+            $eventOffline = array();
+            foreach ($offlineEventF as $key => $value) {
+                $value->id;
+                array_push($eventOffline, $value->id);
+            }
+            $this->view->offlineEventId = $eventOffline;
+        } catch (Exception $e) {
+            $this->logger->critical('[UserAccess] Fetch Exception - ' . $e->getMessage());
+        }
+    }
+//***Array*/////
+
+
+
+*****toArray in volt****
+$allDashboard = Dashboard::find(['order' => 'graphRowIndex asc,graphContainerId asc'])->toArray()
+this->view->allDashboards = $allDashboard;
+% for index, item in allDashboards %}
+        {{ index }} {{  allDashboards[index=1]['id'] }} <br>
+{%  endfor %}
+
+
+*****use Array in volt and set variable value and Logical opearator in volt****
+
+{% if allDashboards[index-1]['graphRowIndex'] is defined %}
+	{{allDashboards[index-1]['graphRowIndex']}}
+
+		{% if allDashboards[index-1]['graphRowIndex'] is defined and allDashboards[index]['graphRowIndex'] is defined %}
+                                    {% set previousRowIndex = "rajkumar" %}  {# declearation of varible}
+					{{previousRowIndex}}		 	{# use of varible}
+                                    <hr>
+                                {% endif %}
+
+{% endif %}
+//*end array*/
+
+
+/* option **/
+ <option value='' selected disabled hidden>------- Select --------</option>
+
+/*Records fited on <div id ="countyIndex"></div>*/
+/*tmpl.min.js use as*/
+<script type="text/x-tmpl" id="tmpl-countyIndex">
+  *% for (var item in o.content){ %*
+      <tr>
+        <td> *%=o.content[item].id%* </td>
+        <td> *%=o.content[item].original%* </td>
+        <td>*%=epochToDate(o.content[item].timestamp)%*</td>
+        <td> <a href="{{appUrl}}public/userfiles/presentation/event_*%=o.eventid%*/session_*%=o.sessionid%*/*%=o.content[item].filename%*" class="btn btn-sm btn-link "target="_blank"><i class="fa fa-download"></i></a> 
+          <button onclick ="presentationfiledelete(*%=o.content[item].id%*);" target="_blank" class="btn btn-sm btn-link " type="button"><i class="fa fa-trash text-danger" ></i></button> 
+      </td>
+      </tr>
+*% } %*
+</script>
+/*Show date */
+    <script>
+        function epochToDate(timestamp) {
+            // x 1000 to convert to milliseconds which JS accepts
+            var date = new Date(timestamp * 1000);
+            var formattedDate = date.getUTCDate() + '-' + (date.getUTCMonth() + 1) + '-' + date.getUTCFullYear();
+            return formattedDate;
+        }
+    </script>
+
+
+
+/*Ajax Request sent*/
+ viewCountyData();
+  function viewCountyData() {
+    $.ajax({
+      url: "master/countyIndexRecord",
+      // data: { ColName: value1 },
+      type: "POST",
+      success: function(response) {
+        var resp = $.trim(response);
+        resp = JSON.parse(resp);
+        if(resp.status == 'success'){
+          console.log(resp.data);  
+		/*inner html */
+                        document.getElementById("countyIndex").innerHTML = tmpl("tmpl-countyIndex", resp);
+        }else if(resp.status == 'failure'){
+          demo.showNotification('success','');
+        }else{
+
+        }
+        // $('#demo').html()= tmpl(
+        //   "tmpl-countyIndex",
+        //   resp
+        // );
+        
+      }
+    });
+  }
+/* php*/ 
+
+  $this->view->disable();
+        $countyIndex = array('a' => 'one', 'b' => 'two', 'c' => 'three');
+        $countyIndexRecord = array('status' => 'success', 'data' => $countyIndex);
+        echo json_encode($countyIndexRecord);
+
+
+///////////////////////////////end//////////////////////////
+
+
+//////////////////////////react redux /////////////////
+$input = file_get_contents('php://input');
+$inputEmail = json_encode($input);
+print($inputEmail);
+
+
+This is an email link:
+<a href="mailto:someone@example.com?Subject=Hello%20again" target="_top">Send Mail</a>
+</p>
+
+
+
+
+
+//call constructor
+
+  constructor(props) {
+    super()
+    this.state = {
+      addFormToggle: false
+    };
+  }
+
+##############################pahlcon Insert Update Delete##############################
+         $conn = $this->db;
+                $sql = "SELECT e.title 'eventtitle',s.* FROM session s INNER JOIN event e ON s.eventid = e.id Where s.eventid = :cookieseventid";
+                $row = $conn->prepare($sql);
+                $row->bindParam(':cookieseventid', $cookies->getEventCookie());
+                $view = $row->execute();
+                $this->view->allsession = $row->fetchAll(\Phalcon\Db::FETCH_OBJ);
+
+
+<?php
+
+class EngineController extends ControllerBase
+{
+    public function indexAction()
+    {
+        try {
+            $allEngine = Engine::find();
+            if (count($allEngine) > 0) {
+                $this->view->allEngines = $allEngine;
+            } else {
+                // $this->logger->warning("[ENGINE] [index] Fetch - Empty Records.");
+                $this->flash->warning("Fetching records failed, Please try again !");
+            }
+        } catch (Exception $e) {
+            $this->flash->error("Fetching records failed, Please try again !");
+            $this->logger->critical('[ENGINE] [Index] Fetch Exception - ' . $e->getMessage());
+        }
+    }
+
+    public function addAction()
+    {
+        if ($this->request->isPost()) {
+            try {
+                $addEngine = new Engine;
+                foreach ($this->request->getPost() as $key => $value) {
+                    $addEngine->$key = $value;
+                }
+                $addEngine->timestamp = strtotime("now");
+                if ($addEngine->create()) {
+                    $this->flash->success('Record has been successfully added,');
+                    $this->response->redirect("engine/index");
+                } else {
+                    $this->flash->warning('Record couldn\'t be added to the system, Please try again.');
+                    
+                    // $this->logger->warning("[ENGINE] [Add] Record Couldn't be Inserted.");
+                }
+            } catch (Exception $e) {
+                $this->flash->error('Record couldn\'t be added to the system, Please try again.');
+                $this->logger->critical('[ENGINE] [Add] Create Exception - ' . $e->getMessage());
+            }
+        }
+    }
+
+    public function editAction()
+    {
+        if ($this->request->isPost()) {
+            try {
+                $updateEngine = Engine::find([
+                    "conditions" => "engineId = ?1",
+                    "bind" => [
+                        1 => $this->request->get("engineId"),
+                    ],
+                ]);
+                foreach ($this->request->getPost() as $key => $value) {
+                    $updateEngine[0]->$key = $value;
+                }
+                $updateEngine[0]->timestamp = strtotime("now");
+                if ($updateEngine[0]->save()) {
+                    $this->flash->success("Record has been updated successfully!");
+                    $this->response->redirect("engine/index");
+                } else {
+                    $this->flash->warning("Record couldn't be updated !");
+                    // $this->logger->warning("[ENGINE] [Edit] couldn't be updated.");
+                }
+            } catch (Exception $e) {
+                $this->flash->error("Record couldn't be updated, Please try again !");
+                $this->logger->critical('[ENGINE] [Edit] Update Exception - ' . $e->getMessage());
+            }
+
+        }
+        try {
+            $editEngine = Engine::find([
+                "conditions" => "engineId = ?1",
+                "bind" => [
+                    1 => $this->request->get("engineId"),
+                ],
+            ]);
+            if (count($editEngine) == 1) {
+                $this->view->editEngine = $editEngine[0];
+            } else {
+                $this->flash->warning("Fetching records failed, Please try again !");
+                // $this->logger->warning("[ENGINE] [Index] Fetch - Empty Records found.");
+            }
+        } catch (Exception $e) {
+            $this->flash->error("Fetching records failed, Please try again.");
+            $this->logger->critical('[ENGINE] [Edit] Fetch Exception - ' . $e->getMessage());
+        }
+
+    }
+
+    public function deleteAction()
+    {
+        try {
+            $deleteEngine = Engine::find([
+                "conditions" => "engineId = ?1",
+                "bind" => [
+                    1 => $this->request->get("engineId"),
+                ],
+            ]);
+            $deleteEngine[0]->timestamp = strtotime("now");
+            if ($deleteEngine[0]->delete()) {
+                $this->flash->success("Record was successfully deleted !");
+                $this->response->redirect("engine/index");
+            } else {
+                $this->flash->warning("Record couldn't be deleted, Please try again !");
+                // $this->logger->warning("[ENGINE] [Delete] couldn't be deleted.");
+            }
+        } catch (Exception $e) {
+            $this->flash->error("Record couldn't be deleted, Please try again !");
+            $this->logger->critical('[ENGINE] [Delete] delete Exception - ' . $e->getMessage());
+        }
+    }
+
+}
+
+
+/****volt if else***/
+  {% for event in allevent %}
+                  {{event.location}}
+                    {{utility.convertdate(event.startingdate)}}
+                   {% if event.banner != '' %}
+
+                    {% else %}
+                    {% endif %}
+
+
+/*** volt Switch case**//
+{% switch sensorRangeRecord.sensorRangeVisual %}
+
+                                            {% case "text" %}
+                                           
+                                                {{ matrixBlock.textField | markdown }}
+                                           
+                                            {% case "image" %}
+                                           
+                                               {{ matrixBlock.image[0].getImg() }}
+                                           
+                                            {% default %}
+
+
+{% endswitch %}
+
+
+/*/*////java scriptu for eeach 
+
+$(".column_filter").each(function() {
+    var dataColumn = $(this).attr("id");
+      var dataColumnValue = $(this).val();
+      console.log( dataColumn + "-------------" + dataColumnValue);
+});
+ var array1 = ['a', 'b', 'c'];
+ array1.forEach(element => {
+     console.log("eelelelelele---"+element);
+ });
+
+  $(document).ready(function () {
+        var table = $("#SessionQueryTable").DataTable({
+            columnDefs: [{
+                targets: "datatable-nosort",
+                orderable: false,
+            }],
+            order: [[18, 'asc'], [3, 'desc'], [6, 'asc']]
+        });
+        $('.toggle-vis').on('change', function (e) {
+            e.preventDefault();
+            var column = table.column($(this).attr('data-column'));
+            column.visible(!column.visible());
+        });
+        $('.checkonme').click(function () {
+            if ($(this).prop("checked") == true) {
+                $(this).val('Yes');
+            }
+            else if ($(this).prop("checked") == false) {
+                $(this).val(null);
+                $('input:checkbox').removeAttr('checked');
+            }
+        });
+        $("#hideColumnToogle").click(function () { $("#hideColumnShow").toggle("slow"); });
+        $("#searchToogle").click(function () { $("#searchShow").toggle("slow"); });
+        $('.column_filter').on('keyup click change select', function () { table.columns($(this).attr('data-column')).search(this.value).draw(); });
+        $("#resetAllFilter").click(function () {
+            table
+                .search('')
+                .columns().search('')
+                .draw();
+            console.log('Done');
+        });
+   
+    $(".column_filter").each(function() {
+    var controlId = $(this).attr("id");
+    var controlVal = localStorage.getItem(controlId);
+    if(controlVal != null){
+        console.log(controlId + "-------------" + controlVal);
+        $("#"+controlId).val(controlVal);
+        table.columns($("#"+controlId).attr('data-column')).search(controlVal).draw();
+    }
+});
+    });
+
+ $('.column_filter').change(function(){
+      var dataColumn = $(this).attr("id");
+      var dataColumnValue = $(this).val();
+      console.log( dataColumn + "-------------" + dataColumnValue);
+      localStorage.setItem(dataColumn, dataColumnValue);
+  });
+
+%%%%%%%%%%%%%%%%%%DATA TABLE DISTROYE OBJECT%%%%%%%%%%%%%%%%%%%%%%%%
+  
+    
+    /*GoogleContact Record Show Record Start*/
+ function callListAllRecord() {
+    $.ajax({
+      url: "employee/callList",
+      // data: { ColName: value1 },
+      type: "POST",
+      success: function(response) {
+        var resp = $.trim(response);
+        resp = JSON.parse(resp);
+        console.log(resp);
+        
+        if (resp.status == "success") {
+          /* status:success, data show*/
+
+          var promise1 = new Promise(function(resolve, reject) {
+                $("#callListTable").DataTable().destroy();
+                resolve(true);
+            });
+            promise1.then(function(value) {
+                document.getElementById("callListTableBody").innerHTML = tmpl("tmpl-callListTable",resp.data);
+                $('#intervalVal').html(resp.data.interval);
+                $('#intervalDate').html(resp.data.beforeDate);
+
+                /*DataTable initialization Start*/
+                var table = $('#callListTable').DataTable({
+                        // "scrollX": true,
+                        "ordering": true,
+                        "order": [[ 4, 'desc' ], [ 0, 'asc' ]]
+                    });
+                    table.columns().every(function() {
+                        var that = this;
+                        // $('input', this.header()).on('keyup change', function() {
+                        //     if (that.search() !== this.value) {
+                        //         that.search(this.value).draw();
+                        //     }
+                        // });
+                    });
+                    /*DataTable initialization End*/
+            });
+
+        } else if (resp.status == "failure") {
+          /* status:error, warning show through notify */
+        //   demo.showNotification("danger", "bottom", "right", resp.data);
+          alert(resp.data);
+        } else {
+          console.log("External Error");
+        }
+      }
+    });
+  }
+//   callListAllRecord();
+
+  /*GoogleContact Record Show Record end*/
+  setInterval(function(){ callListAllRecord(); }, 3000);
+
+
+########################## PHALCON COOKIES start################ 
+/* service */
+
+use Phalcon\Http\Response\Cookies;
+
+$di->set(
+    'cookies',
+    function () {
+        $cookies = new Cookies();
+
+        $cookies->useEncryption(false);
+
+        return $cookies;
+    }
+);
+
+/*-------------------use on Controller------------------*/
+
+
+/*________________set cookies*/
+
+$this->cookies->set('CookiesName', 'Value-1', time() + 15 * 86400);
+
+
+/*________________set cookies*/
+
+// Check if the cookie has previously set
+if ($this->cookies->has('CookiesName')) {
+    // Get the cookie
+    $rememeberCookiesName = $this->cookies->get('CookiesName');
+    // Get the cookie's value
+    return $rememeberCookiesName->getValue();
+
+} else {
+    return false;
+}
+
+/*________________delete cookies*/
+// Delete the cookie
+$rememeberCookiesName = $this->cookies->get('CookiesName');
+$rememeberCookiesName->delete();
+
+
+########################## PHALCON COOKIES end################ 
+
+/////////////  js Array push ////////
+ data =[    [{        "sensorId": "2",    }]];
+     convertToRequired(data,1);
+     function convertToRequired(data,indexToPush) {
+         var objectToPush = {
+             sensorId: "CUSTOM",
+         };
+         tmp = [];
+         for (let index = 1; index <= indexToPush; index++) {
+             if (index === indexToPush) {
+                 // Push data 
+                 tmp.push(objectToPush);
+             } else {
+                 // push another empty array
+                 tmp.push([]);
+             }
+         }
+         data.push(tmp);
+         console.log(data);
+     }
+/////////////  js Array push ////////
+
+/* menu bar active highlight current page start*/
+      $(document).ready(function ($) {
+            var url = window.location.href;
+            var activePage = url;
+            $('#navigation li a').each(function () {
+                var linkPage = this.href;
+                if (activePage == linkPage) {
+                    $(this).closest("li").addClass("active");
+                }
+            });
+        });
+/* menu bar active highlight current page end*/
+?>
+
+
+
+
+
+
+
+/** Ajax file upload with multiple value */ 
+     $('.uploadfile').change(function () {
+            var speakerLinkId = parseInt('{{sessionquery.presentationid}}');
+            var eventId = parseInt('{{sessionquery.event_uid}}');
+            var sessionId = '{{sessionquery.session_uid}}';
+
+            var formData = new FormData();
+            formData.append('speakerlinkid', speakerLinkId);
+            formData.append('eventid', eventId);
+            formData.append('sessionid', sessionId);
+            formData.append('file', document.getElementById("uploadfile" + speakerLinkId).files[0]);
+            $.ajax({
+                url: 'useraccess/fileupload',
+                type: 'POST',
+                enctype: 'multipart/form-data',
+                processData: false,  // Important!
+                contentType: false,
+                cache: false,
+                data: formData,
+                success: function (data) {
+                    var message = (data == 'success') ? 'File Uploaded Successfully...' : 'File couldn\'t be uploaded, Please try again later!';
+                    swal("File Upload Message", message, data);
+                    viewfiledata();
+                }
+            });
+        });
+/***/*/*/*
+
+/* c++ file read (csv)*/
+#include <iostream>
+#include <fstream>
+#include <sstream>
+#include <string>
+using namespace std;
+
+int main () {
+    string line, csvItem;
+    ifstream myfile ("file.csv");
+    int lineNumber = 0;
+    int lineNumberSought = 1;  // you may get it as argument
+    if (myfile.is_open()) {
+        while (getline(myfile,line)) {
+            lineNumber++;
+            if(lineNumber != lineNumberSought) {
+                // cout << line << endl;// Print line string 
+                istringstream myline(line);
+                while(getline(myline, csvItem, ',')) {
+                    cout << csvItem << ',';// Print data one by one
+                }
+            }
+        }
+        myfile.close();
+    }
+    return 0;
+}
+/**/
+
+/* python/qml data axchange between qml and python*/
+
+astroid==2.2.5
+certifi==2019.3.9
+chardet==3.0.4
+idna==2.8
+isort==4.3.20
+lazy-object-proxy==1.4.1
+mccabe==0.6.1
+Pillow==6.0.0
+pkg-resources==0.0.0
+PyAutoGUI==0.9.44
+PyGetWindow==0.0.5
+pylint==2.3.1
+PyMsgBox==1.0.6
+PyQt5==5.12.2
+PyQt5-sip==4.19.17
+PyRect==0.1.4
+PyScreeze==0.1.21
+PySide2==5.12.3
+python-xlib==0.25
+PyTweening==1.0.3
+requests==2.22.0
+shiboken2==5.12.3
+six==1.12.0
+typed-ast==1.4.0
+urllib3==1.25.3
+wrapt==1.11.1
+
+
+/*main.py*/
+import sys
+
+from PySide2.QtCore import QObject, Signal, Property, QUrl, QStringListModel, QAbstractListModel, Qt, QCoreApplication,QModelIndex,Slot
+from PySide2.QtGui import QGuiApplication
+from PySide2.QtQml import QQmlApplicationEngine,QQmlComponent
+import subprocess, time, os
+import pyautogui
+import requests
+import configparser
+import uuid
+
+class Data(object):
+    def __init__(self, test_one=''):
+        self._test_one = test_one
+    
+    def test_one(self):
+        return self._test_one
+
+class Model(QAbstractListModel):
+
+    test_oneRole = Qt.UserRole + 1
+    _roles = {test_oneRole: b"test_one"}
+
+    def __init__(self, parent=None):
+        QAbstractListModel.__init__(self, parent)
+
+        self._datas = []
+
+    def addData(self, data):
+        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
+        self._datas.append(data)
+        self.endInsertRows()
+
+    def rowCount(self, parent=QModelIndex()):
+        return len(self._datas)
+
+    def data(self, index, role=Qt.DisplayRole):
+        try:
+            data = self._datas[index.row()]
+        except IndexError:
+            return QVariant()
+
+        if role == self.test_oneRole:
+            return data.test_one()
+
+        return QVariant()
+
+    def roleNames(self):
+        return self._roles
+
+
+class Model_msg(QAbstractListModel):
+
+    user_msgRole = Qt.UserRole + 1
+    _roles = {user_msgRole: b"user_msg"}
+
+    def __init__(self, parent=None):
+        QAbstractListModel.__init__(self, parent)
+
+        self._datas = []
+
+    def addData(self, data):
+        self.beginInsertRows(QModelIndex(), self.rowCount(), self.rowCount())
+        self._datas.append(data)
+        self.endInsertRows()
+
+    def deletePerson(self, row):
+        self.beginRemoveColumns(QModelIndex(), row, row)
+        del self._datas[row]
+        self.endRemoveRows()
+
+    def rowCount(self, parent=QModelIndex()):
+        return len(self._datas)
+
+    def data(self, index, role=Qt.DisplayRole):
+        try:
+            data = self._datas[index.row()]
+        except IndexError:
+            return QVariant()
+
+        if role == self.user_msgRole:
+            return data.test_one()
+
+        return QVariant()
+
+    def roleNames(self):
+        return self._roles
+
+class ExecuteCommand(QObject):
+    # Slot for command text
+    @Slot(str, result=str)
+    def command(self, arg1):
+        ''' start subprocess means New terminal open and execute command '''
+        # Windows
+        #subprocess.call('start /wait echo "ABC"', shell=True)
+
+        # Linux
+        cmd = subprocess.call(["xfce4-terminal"])
+        time.sleep(0.3)
+        pyautogui.typewrite(arg1)   #TypeText on Terminal
+        pyautogui.hotkey("enter")   # same as Keyboard Enter
+        # flag :Remove Timer
+        # time.sleep(0.5)
+        # pyautogui.typewrite('exit')   #zx
+        # pyautogui.hotkey("enter")   #zx
+        # print(arg1) #Print text on Execution
+        return arg1
+
+'''
+if userType free Return value 'free'
+from licence users licence Expire then return value 'free' otherwise 'licence'
+'licence' user Input/View/Operate unlimited Command, but 'free' user Input/View/Operate Five Command 
+'''
+
+def fileWrite(textWrite):
+    print(textWrite)
+    f= open("config.txt","w+")
+    f.write(textWrite)
+    f.close()
+
+def checkUserValidation(userType,license): 
+    if userType == "licence":
+        ''' Licence user Need to verify Inputied value of Licence '''
+        try:
+            # defining the api-endpoint  
+            API_ENDPOINT = "http://192.168.1.14/GIT/QtProject/Qt-backend-php/test.php"
+            # data to be sent
+            data = {"accessType":"licence","licenceKey":license} 
+            # sending post request and saving response as response object 
+            r = requests.post(url = API_ENDPOINT, data = data) 
+            data = r.json() 
+            print(data["status"])
+            # extracting latitude, longitude and formatted address  
+            # of the first matching location 
+            if data["status"] == "success":
+                ''' licence write on file '''
+                textWrite= "licence|"+license.strip()
+                fileWrite(textWrite)
+                statusReturn = "access"
+            else:
+                statusReturn = "unaccess"
+                
+                # extracting response text  
+                # pastebin_url = r.text 
+                # print("The pastebin URL is:%s"%pastebin_url) 
+        except:
+            statusReturn = "unaccess"
+
+    elif userType == "trial":
+        ''' Trial user Need to verify The System Unique Id valid only first 30 Days Second Time Not Allowed '''
+        # flog System Unique id
+        API_ENDPOINT = "http://192.168.1.14/GIT/QtProject/Qt-backend-php/test.php"
+        # printing the value of unique MAC 
+        # 0xf44d30485295L
+        # address using uuid and getnode() function  
+        HardwareId = hex(uuid.getnode())
+        print("HardwareId",HardwareId)
+        data = {"accessType":"trial","licenceKey":HardwareId} 
+        r = requests.post(url = API_ENDPOINT, data = data) 
+        data = r.json() 
+        print("responce ",data["status"])
+        if data["status"] == "success":
+            ''' trail write on file '''
+            textWrite= "trial|"+HardwareId.strip()
+            fileWrite(textWrite)
+            statusReturn = "access"
+        else:
+            statusReturn = "unaccess"
+        # try:
+            
+        # except:
+        #     statusReturn = "unaccess"
+    else:
+        statusReturn = "unaccess"
+    
+    print(userType,statusReturn)
+    return statusReturn
+
+
+def fileCheck():
+    try:
+        f= open("config.txt","r")
+        content = f.read()
+        statusVal= content.split("|")
+        # print(value_file)
+    except:
+        statusVal=('','')
+    print('fileReadResponce : ',statusVal)
+    return statusVal
+    
+
+
+if __name__ == '__main__':
+    # check user validation free/licence
+    value_file = fileCheck()
+    user_val = value_file[0].strip()
+    license_val = value_file[1].strip()
+    userAccessType = checkUserValidation(user_val,license_val)
+
+    QCoreApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
+    app = QGuiApplication(sys.argv)
+    engine = QQmlApplicationEngine()
+
+    model = Model()
+    list_cmd=['ls','ps']
+    
+    # add data
+    for cmd in list_cmd:
+        model.addData(Data(cmd))
+
+    context = engine.rootContext()
+    context.setContextProperty('myModel', model)
+    
+    # Create a excuteCommand object
+    executeCommand = ExecuteCommand()
+    
+    # access_msg
+    model_msg = Model_msg()
+    model_msg.addData(Data(userAccessType))
+
+    context = engine.rootContext()
+    context.setContextProperty('model_msg', model_msg)
+
+
+    # And register it in the context of QML
+    engine.rootContext().setContextProperty("executeCommand", executeCommand)
+   
+    ''' Qml file description '''
+    engine.load(QUrl.fromLocalFile('test.qml'))
+
+    ''' Qml Action Trigger function '''
+    win = engine.rootObjects()[0]
+    button = win.findChild(QObject, "myButton")
+    areaOfEvent = win.findChild(QObject, "areaOfEvent")
+    foo = win.findChild(QObject, "input_licence")
+    button_licence = win.findChild(QObject, "btn_licence")
+    button_trial = win.findChild(QObject, "btn_trial")
+    button_trial_p = win.findChild(QObject, "btn_trial_p")
+
+    msg_user=  win.findChild(QObject, "message_u")
+    msg_user.setProperty("text",userAccessType)
+    message_main_container =  win.findChild(QObject, "message_main_container")
+
+    if userAccessType !="unaccess":
+        areaOfEvent.setProperty("visible","true")
+    else:
+        if user_val == "trial":
+            areaOfEvent.setProperty("visible","false")
+            message_main_container.setProperty("text","Warning:\n Your Trial expired, Please activate licence.")
+            msg_user.setProperty("text","Activate licence")
+        if user_val == "licence":
+            areaOfEvent.setProperty("visible","false")
+            message_main_container.setProperty("text","Warning:\n Your Licence expired, Please activate licence.")
+            msg_user.setProperty("text","Activate licence")
+        
+    if user_val == "licence":
+        foo.setProperty("text",license_val)
+
+
+    '''Function Start '''
+    def myFunction():
+        # print("handler called")
+        cmdInput = win.findChild(QObject, "cmd_input")
+        new_cmd = cmdInput.property("text")
+        new_cmd = new_cmd.strip()
+        # check if command already exist in list then not insert 
+        if new_cmd in list_cmd or new_cmd=='':
+            print("\u2717 " ,new_cmd,' >>> ',list_cmd)
+        else:
+            # insert
+            if userAccessType =="access":
+                '''Valid user Input unlimited command'''
+                list_cmd.append(new_cmd)
+                model.addData(Data(new_cmd))
+                print("\u2713" ,new_cmd,' >>> ',list_cmd)
+                cmdInput.setProperty('text','')
+            else:
+                print(len(list_cmd))
+                model_msg.addData(Data('Not permit to inserting record')) #flag
+                msg_user.setProperty("text",'Not permit to inserting record')
+                pass
+        
+        
+                
+    def myFunction_licence():
+        print("Licence called")
+        # foo = win.findChild(QObject, "input_licence")
+        licence_val = foo.property("text")
+        licence_val = licence_val.strip()
+        # check if command already exist in list then not insert 
+        if licence_val in list_cmd or licence_val=='':
+            print("\u2717 " ,licence_val,'input empty')
+        else:
+            message = checkUserValidation("licence",licence_val)
+            model_msg.addData(Data(message))
+            global userAccessType
+            userAccessType = message
+            msg_user.setProperty("text",message)
+            if message == "access":
+                button_trial_p.setProperty("color","white")
+                button_trial.setProperty('enabled','true')
+                areaOfEvent.setProperty("visible","true")
+                foo.setProperty("text",licence_val)
+            else:
+                areaOfEvent.setProperty("visible","false")
+                message_main_container.setProperty("text","Warning:\n Your licence expired.")
+
+            
+    def myFunction_trial():
+        print("trial called")
+        message =  checkUserValidation("trial","")
+        model_msg.addData(Data(message))
+        global userAccessType
+        userAccessType = message
+        msg_user.setProperty("text",message)
+        if message == "access":
+            button_trial_p.setProperty("color","white")
+            button_trial.setProperty('enabled','true')
+            areaOfEvent.setProperty("visible","true")
+            foo.setProperty("text",'')
+        else:
+            areaOfEvent.setProperty("visible","false")
+            message_main_container.setProperty("text","Warning:\n Your licence/trail expired.")
+    
+    
+    '''Function End'''      
+    
+    button.clicked.connect(myFunction)
+    button_licence.clicked.connect(myFunction_licence)
+    button_trial.clicked.connect(myFunction_trial)
+    win.show()
+
+    engine.quit.connect(app.quit)
+
+sys.exit(app.exec_())
+
+
+/*test.qml*/
+// import QtQuick 2.4
+import QtQuick 2.10
+import QtQuick.Controls 2.5
+import QtQuick.Layouts 1.0
+import QtQuick.Window 2.2
+
+ApplicationWindow {
+    id: mainContainer
+    width: 400;height: 500
+    visible: true
+    title: qsTr("REAK INFOTECH LLP- Terminal Command")
+    color: "#ffffff"
+    Rectangle {
+        width: parent.width
+        height: parent.height
+        color: "transparent"
+        Column {
+            width: parent.width
+            /* inner column */
+            Rectangle {
+                width: parent.width;height: (mainContainer.height * 0.19)
+                color: "transparent"
+                Image {
+                    id: logo_img
+                    source: "assets/img/MUL8R Circular.png"
+                    width: 100;height: parent.height
+                    y: 10
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+            Rectangle {
+                width: parent.width;height: (mainContainer.height * 0.63)
+                // disable all mouse event
+                Text {
+                    id: listContianer_message
+                    width: parent.width
+                    height: parent.height
+                    visible:true
+                    text:"Warning:"
+                    color:"red"
+                    objectName:"message_main_container"
+                    padding:10
+                    anchors.centerIn: parent
+                }
+                MouseArea {
+                    id: listContianer
+                    width: parent.width
+                    height: parent.height
+                    anchors.fill: parent
+                    drag.target: parent
+                    visible: false
+                    objectName:"areaOfEvent"
+                    Column {
+                        width: parent.width
+                        Rectangle {
+                            x: 10;y: 10
+                            width: (parent.width - 20);height: (mainContainer.height * 0.13)
+                            color: "transparent"
+                            objectName: "cmd_input_Control"
+                            GridLayout {
+                                id: inputColumnGroupContainer
+                                anchors.fill: parent
+                                TextField {
+                                    id: cmd_input
+                                    objectName: "cmd_input"
+                                    placeholderText: "Enter command"
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    Layout.fillWidth: true
+                                }
+                                Button {
+                                    id: cmd_button
+                                    Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                    palette {
+                                        button: "#132c48"
+                                    }
+                                    Text {
+                                        text: "Add Commnad"
+                                        anchors.centerIn: parent
+                                        color: "#ffffff"
+                                    }
+                                    signal messageRequired
+                                    objectName: "myButton"
+                                    onClicked: messageRequired()
+                                }
+                            }
+                        }
+                        Rectangle {
+                            x: 0;y: 10
+                            width: parent.width;
+                            height: (mainContainer.height * 0.5)
+                            clip: true
+                            color: "transparent"
+                            objectName: "listViewContainer"
+                            ScrollView {
+                                width: parent.width
+                                height: parent.height
+                                ListView {
+                                    model: myModel
+                                    anchors.fill: parent
+                                    delegate: Column {
+                                        width: parent.width
+                                        spacing: 0
+                                        bottomPadding: 1
+                                        Button {
+                                            width: parent.width
+                                            palette {
+                                                button: "#585858"
+                                            }
+                                            Text {
+                                                text: model.test_one
+                                                anchors.centerIn: parent
+                                                color: "#ffffff"
+                                            }
+                                            Rectangle {
+                                                color: 'transparent'
+                                                width: parent.width
+                                                height: parent.height
+                                                Drag.active: dragArea.drag.active
+                                                Drag.dragType: Drag.Automatic
+                                                Drag.supportedActions: Qt.CopyAction
+                                                Drag.mimeData: {
+                                                    "text/plain": model.test_one + "\r\n"
+                                                    // \n use for Enter same as Press enter Key 
+                                                }
+                                                MouseArea {
+                                                    id: dragArea
+                                                    anchors.fill: parent
+                                                    drag.target: parent
+                                                    onPressed: parent.grabToImage(function (result) {
+                                                        parent.Drag.imageSource = result.url
+                                                    })
+                                                    onClicked: {
+                                                        // Invoke the command on terminal
+                                                        executeCommand.command(model.test_one)
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            Rectangle {
+                width: parent.width
+                height: (mainContainer.height * 0.03)
+                color: "#ffffff"
+                Text {
+                    id: message
+                    text: "Sign In"
+                    objectName: "message_u"
+                    width: parent.width
+                    height: parent.height
+                    color: "#ffffff"
+
+                }
+            }
+
+            Rectangle {
+                width: parent.width
+                height: (mainContainer.height * 0.07)
+                color: "#021f54"
+                clip: true
+                Button {
+                    width: parent.width
+                    height: parent.height
+                    palette {
+                        button: "transparent"
+                    }
+                    Text {
+                        text: "Sign In"
+                        anchors.centerIn: parent
+                        color: "#ffffff"
+                    }
+
+                    onClicked: popup.open()
+                }
+
+            }
+            Rectangle {
+                width: parent.width;
+                height: (mainContainer.height * 0.07)
+                color: "#ffffff"
+                Image {
+                    id: logo_img_footer
+                    source: "assets/img/footerlogo.png"
+                    width: parent.width * 0.7
+                    height: parent.height
+                    // y: 10
+                    anchors.horizontalCenter: parent.horizontalCenter
+                }
+            }
+
+
+            Popup {
+                id: popup
+                x: mainContainer.width * 0.15
+                y: mainContainer.height * 0.15
+                width: mainContainer.width * 0.7
+                height: mainContainer.height * 0.6
+                modal: true
+                focus: true
+                // contentWidth: view.implicitWidth
+                // contentHeight: view.implicitHeight
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                Column {
+                    width: parent.width
+                    spacing: 0
+                    padding: 1
+
+                    Rectangle {
+                        id: inputLinRec
+                        width: parent.width
+                        height: (popup.height * 0.3)
+                        GridLayout {
+                            anchors.fill: parent
+                            TextField {
+                                id: input_licence
+                                objectName: "input_licence"
+                                placeholderText: "Enter Licence"
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                Layout.fillWidth: true
+                                Keys.onEnterPressed: {
+                                    consol.log('hi raj')
+                                }
+                            }
+                            Button {
+                                id: button_licence
+                                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                                palette {
+                                    button: "#132c48"
+                                }
+                                Text {
+                                    text: "Submit"
+                                    // flag text
+                                    anchors.centerIn: parent
+                                    color: "#ffffff"
+                                }
+                                signal messageRequired_lin
+                                objectName: "btn_licence"
+                                onClicked: messageRequired_lin()
+                            }
+                        }
+
+                    }
+
+                    Rectangle {
+                        height: (popup.height * 0.2)
+                        width: parent.width
+                        color: "#132c48"
+                        objectName: "btn_trial_p"
+                        Text {
+                            text: "Or\n"
+                            color: "#ffffff"
+                            anchors.centerIn: parent
+                        }
+                        MouseArea {
+                            id: button_licence_tril
+                            anchors.fill: parent
+                            // drag.target: parent
+                            width: parent.width
+                            height: parent.height
+
+                            Text {
+                                text: "\ntrial 30 Day"
+                                // flag text
+                                anchors.centerIn: parent
+                                color: "#ffffff"
+                            }
+                            signal messageRequired_trial
+                            objectName: "btn_trial"
+                            onClicked: messageRequired_trial()
+                        }
+
+                    }
+
+
+                    Rectangle {
+                        width: parent.width
+                        height: (popup.height * 0.2)
+                        clip: true
+                        /*
+                        ListView {
+                            anchors.fill: parent
+                            model: model_msg
+                            delegate: Text {
+                                text: model.user_msg
+                            }
+                        }
+                        */
+                    }
+
+                    Rectangle {
+                        width: parent.width
+                        height: (popup.height * 0.1)
+                        Button {
+                            width: parent.width
+                            height: 30
+                            Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
+                            palette {
+                                button: "#132c48"
+                            }
+                            Text {
+                                text: "Close"
+                                // flag text
+                                anchors.centerIn: parent
+                                color: "#ffffff"
+                            }
+                            onClicked: popup.close()
+                        }
+                    }
+
+                }
+            }
+
+        }
+
+    }
+}
+
+
+######################## Python Scraper BeautifulSoup and Selenium use Project: Wike Scraper ############################
+Download webdriver.Firefox()
+use command : wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+Extrect file use commnad : tar -xvzf geckodriver*
+Change mod command : chmod +x geckodriver
+set path command :  export PATH=$PATH:Driver/
+
+'''
+https://www.scott-sports.com/au/en/ (Select Bike, from the menu - I need all bikes that are in the categories: MOUNTAIN, CYCLOCROSS, GRAVEL)
+
+'MOUNTAIN', 'https://www.scott-sports.com/au/en/products/bike-bikes-mountain'
+'GRAVEL/CYCLOCROSS' : 'https://www.scott-sports.com/au/en/products/bike-bikes-road-gravel-cx'
+
+wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+
+'''
+
+from bs4 import BeautifulSoup
+import urllib.request
+# import csv
+import pandas as pd
+import json
+from datetime import datetime, timedelta
+import requests
+from collections import OrderedDict
+# selenium
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import re
+import os
+
+
+class Sec:
+    exportRecords = []
+    ColumnHeading= {''}
+
+    def downloadImage(self,imagePath,fileName):
+        try :
+            urllib.request.urlretrieve(imagePath, "Image/"+fileName)
+            print("\t Download >>>" ,fileName)
+        except:
+            print('\t Download Fail :', imagePath)
+
+    def otherSpecification(self, url, Local_dictionary):
+        #create a new Firefox session
+        driver = webdriver.Firefox()
+        driver.implicitly_wait(60)
+        driver.get(url)
+        # driver.refresh()
+        soup = BeautifulSoup(driver.page_source,'lxml')
+        # reddit1Link = requests.get(url)
+        # soup =BeautifulSoup(reddit1Link.content,"lxml")
+        specifications = soup.find('div',{'class':'product_specs__content--inner'}).find_all('li',{'class':'specs-list__item'})
+        if len(specifications) > 0 :
+            '''file Download '''
+            driver.close()
+            imagePath = soup.find('figure').find('img')['src']
+            # print(imagePath)
+            imageExtension = imagePath.split('.')[-1:]
+            # fileName ="scott-sports-a."+imageExtension[0]
+            fileName ="scott-sports-"+str(len(self.exportRecords)+1)+"."+imageExtension[0]
+            # print(fileName)
+            Local_dictionary.update({"IMAGE": fileName})
+            self.downloadImage(imagePath,fileName)
+           
+            for spec_row in specifications:
+                try:
+                    attr = (spec_row.find('h4',{'class':'specs-list__title'}).text).strip()
+                    attr = str(attr)
+                    value = (spec_row.find('div',{'class':'specs-list__content'}).text).strip()
+                    # print(attr,'\t\t',value)
+                    self.ColumnHeading.update({attr})
+                    Local_dictionary.update({attr : value})
+                except:
+                    print('')
+                    pass
+        return Local_dictionary
+
+    def find_basic_detail(self,bike_container_list,category,subcategory):
+        i= len(bike_container_list)
+        j=1
+        for bikeCard in bike_container_list:
+            # try:
+            # Local_dictionary={}
+            bikeName_a = bikeCard.find('a',{"id":"product-label-url"})
+            specification_page_url = "https://www.scott-sports.com"+bikeName_a['href']
+            # print(specification_page_url)
+            
+            bikeName = (bikeName_a.text).strip()
+            # print(bikeName)
+
+            # bikeName = "TMP_1"
+            # fileName = "1.jpg"
+            # saleprice = "$1235,46789"
+            # specification_page_url ="http://localhost/GIT/unifiedScraper/tmp/specification.html"
+
+            Local_dictionary={"CATEGORY":category, "NAME":bikeName,"SUBCATEGORY":subcategory}
+            # print(specification_page_url,Local_dictionary)
+            basic_info_List =  self.otherSpecification(specification_page_url,Local_dictionary)
+            self.exportRecords.append(basic_info_List)
+            # break
+            # except:
+            #     pass
+
+            print('... pending',i-1)
+            # flag
+            j+=1
+            # if j == 3:
+            #     break
+            i-=1
+        return 0
+            
+    def toNumber(self,num):
+        try:
+            num = re.sub("\D", "", num)
+        except:
+            num = num
+        return int(num)
+
+    def bike_scrape(self,serverUrl,category,subcategory):
+        print('\t\t\t------ bikes--------')
+        #create a new Firefox session
+        driver = webdriver.Firefox()
+        driver.implicitly_wait(60)
+        driver.get(serverUrl)
+        driver.refresh()
+        '''
+        python_button = driver.find_elements_by_class_name('product-label-url')
+        python_button.click() #click fhsu link
+        '''
+        soup = BeautifulSoup(driver.page_source,'lxml')
+        
+        # reddit1Link = requests.get(serverUrl)
+        # soup =BeautifulSoup(reddit1Link.content,"lxml")
+
+        bike_container_list = soup.find("div",{"class":"product_list"}).find_all("div",{"class":"article"})
+
+        currentResult=len(bike_container_list)
+        totalResultsContainer = soup.find('div',{'class':'sorting-bar-container'})
+        totalResults = (totalResultsContainer.find('div',{'class':'totalResults'}).text).strip()
+        totalResults = self.toNumber(totalResults)
+        print('Result (T/C)',totalResults,currentResult )
+        if currentResult > 0 :
+            driver.close()
+            self.find_basic_detail(bike_container_list, category,subcategory)
+            try:
+                subcategory_nextPage = totalResultsContainer.find('a',{'rel':'next'})['href']
+                subcategory_nextPage = "https://www.scott-sports.com"+subcategory_nextPage
+                # print('nextPage', subcategory_nextPage)
+                self.bike_scrape(subcategory_nextPage, category, subcategory)
+            except:
+                print('--x--')
+        return 0
+        # except:
+        #     print('Error:','404','master', serverUrl)
+
+
+    def bike_scrape_master(self,serverUrl,category):
+        # create a new Firefox session
+        driver = webdriver.Firefox()
+        driver.implicitly_wait(60)
+        driver.get(serverUrl)
+        driver.refresh()
+        '''
+        python_button = driver.find_elements_by_class_name('product-label-url')
+        python_button.click() #click fhsu link
+        '''
+        soup = BeautifulSoup(driver.page_source,'lxml')
+        # reddit1Link = requests.get(serverUrl)
+        # soup =BeautifulSoup(reddit1Link.content,"lxml")
+        bike_cat_list = soup.find('div',{'id':'overview'}).find_all("div",{"class":"info-inner"})
+        print('---- subcategory ---',len(bike_cat_list))
+        if len(bike_cat_list) > 0 :
+            driver.close()
+            for bikeCatCard in bike_cat_list:
+                subcategory = (bikeCatCard.find('h2').text).strip()
+                subcategory_url = bikeCatCard.find('a')['href']
+                subcategory_url = "https://www.scott-sports.com"+subcategory_url
+                print('S:',subcategory,'\t <> \t',subcategory_url)
+                self.bike_scrape(subcategory_url, category, subcategory)
+
+    def saveDetail_CSV(self,DF_basic_bike_info):
+        today = datetime.now()
+        fileName = r'History/BikeInfo'+str(today.year)+today.strftime('%m')+today.strftime('%d')+'.csv'
+        export_csv = DF_basic_bike_info.to_csv (fileName, index = True, header=False)
+        return ('CSV:',fileName)
+
+    def columns(self):
+        columns=['CATEGORY','SUBCATEGORY', 'NAME', 'IMAGE']
+        for newCol in self.ColumnHeading:
+            if newCol !='':
+                columns.append(newCol)
+        return columns
+
+
+    def main(self):
+        # set PATH
+        os.system('export PATH=$PATH:Driver/')
+
+        print('-------------------------GRAVEL/CYCLOCROSS-------------------------')
+        bikesCategory = ['GRAVEL/CYCLOCROSS', 'https://www.scott-sports.com/au/en/products/bike-bikes-road-gravel-cx','working']
+        # bikesCategory = ['aaa', 'http://localhost/GIT/unifiedScraper/tmp/syclocross.html']
+        self.bike_scrape(bikesCategory[1],bikesCategory[0],"-")
+        
+        print('-------------------------MOUNTAIN-------------------------')
+        bikesCategory = ['MOUNTAIN', 'https://www.scott-sports.com/au/en/products/bike-bikes-mountain','pending']
+        # bikesCategory = ['MOUNTAIN', 'http://localhost/GIT/unifiedScraper/tmp/sc-master.html']
+        self.bike_scrape_master(bikesCategory[1],bikesCategory[0])
+
+        print('------------------ Bike Basic Info parse form server------------------')
+        DF_basic_bike_info = pd.DataFrame(self.exportRecords, columns=self.columns()) #print tabulated format 
+        print(DF_basic_bike_info.T)
+        
+        file_name = self.saveDetail_CSV(DF_basic_bike_info.T)
+        print('File Details save in History :',file_name)
+
+
+obj = Sec()
+obj.main()
+
+

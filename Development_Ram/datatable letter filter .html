@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
+    <link href="https://nightly.datatables.net/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    <script src="https://nightly.datatables.net/js/jquery.dataTables.js"></script>
+    
+    <title>Welcome To Reak</title>
+    <style>
+        div.alphabet {
+            position: relative;
+            display: table;
+            width: 100%;
+            margin-bottom: 1em;
+        }
+
+        div.alphabet span {
+            display: table-cell;
+            color: #3174c7;
+            cursor: pointer;
+            text-align: center;
+            width: 3.5%
+        }
+
+        div.alphabet span:hover {
+            text-decoration: underline;
+        }
+
+        div.alphabet span.active {
+            color: black;
+        }
+
+        div.alphabet span.empty {
+            color: red;
+        }
+
+        div.alphabetInfo {
+            display: block;
+            position: absolute;
+            background-color: #111;
+            border-radius: 3px;
+            color: white;
+            top: 2em;
+            height: 1.8em;
+            padding-top: 0.4em;
+            text-align: center;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+
+    <div class="h-screen flex flex-row flex-wrap">
+        <div class="bg-gray-100 flex-1 py-0 px-3 md:mt-16">
+
+
+            <div class="flex items-center justify-center">
+                <div id="test_body-nav" class="grid grid-cols-1 mt-3 xl:grid-cols-1 p-2"></div>
+            </div>
+
+            <div class="grid grid-cols-1 mt-3 xl:grid-cols-1 text-xs p-2">
+                <h1 class="text-xl">Room Classes List</h1>
+            </div>
+            <div class="grid grid-cols-1 gap-6 mt-1 xl:grid-cols-1 text-xs">
+
+                <div class="container w-full md:w-4/5 xl:w-full  mx-auto">
+
+
+                    <div id='' class="p-2 mt-0 lg:mt-0 rounded shadow bg-white">
+
+
+                        <table id="test" class="stripe hover cell-border" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th data-priority="1">Sort Order</th>
+                                    <th data-priority="2">Room Class Name</th>
+                                    <th data-priority="3">Abbreviation</th>
+                                    <th data-priority="4">Rooms</th>
+                                    <th data-priority="5">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="test_body">
+                                <tr>
+                                    <td>2</td>
+                                    <td>ABC</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>abc</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>add</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>sub</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>muli</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>ope</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>div</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>seq</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr> <tr>
+                                    <td>2</td>
+                                    <td>ABC</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>abc</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>add</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>sub</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>muli</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>ope</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>div</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>seq</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr> <tr>
+                                    <td>2</td>
+                                    <td>ABC</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>abc</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>add</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>sub</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>muli</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>ope</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>2</td>
+                                    <td>div</td>
+                                    <td>Queen Room</td>
+                                    <td>5</td>
+                                    <td>Active</td>
+                                </tr>
+                                <tr>
+                                    <td>4</td>
+                                    <td>seq</td>
+                                    <td>King Room</td>
+                                    <td>4</td>
+                                    <td>Active</td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+
+
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+
+
+
+
+
+    <script>
+        var table;
+        var _alphabetSearch = '';
+
+        $.fn.dataTable.ext.search.push(function (settings, searchData) {
+            if (!_alphabetSearch) {
+                return true;
+            }
+
+            if (searchData[1].charAt(0).toUpperCase() === _alphabetSearch) {
+                return true;
+            }
+
+            return false;
+        });
+
+
+        function bin(data) {
+            var letter, bins = {};
+
+            for (var i = 0, ien = data.length; i < ien; i++) {
+                letter = data[i].charAt(0).toUpperCase();
+
+                if (bins[letter]) {
+                    bins[letter]++;
+                }
+                else {
+                    bins[letter] = 1;
+                }
+            }
+
+            return bins;
+        }
+
+
+        $(document).ready(function () {
+            var table = $('#test').DataTable();
+
+            var alphabet = $('<div class="alphabet"/>').append('Search: ');
+            var columnData = table.column(1).data();
+            var bins = bin(columnData);
+
+            $('<span class="clear active"/>')
+                .data('letter', '')
+                .data('match-count', columnData.length)
+                .html('All')
+                .appendTo(alphabet);
+
+            for (var i = 0; i < 26; i++) {
+                var letter = String.fromCharCode(65 + i);
+
+                $('<span/>')
+                    .data('letter', letter)
+                    .data('match-count', bins[letter] || 0)
+                    .addClass(!bins[letter] ? 'empty' : '')
+                    .html(letter)
+                    .appendTo(alphabet);
+            }
+
+            alphabet.insertBefore(table.table().container());
+
+            alphabet.on('click', 'span', function () {
+                alphabet.find('.active').removeClass('active');
+                $(this).addClass('active');
+
+                _alphabetSearch = $(this).data('letter');
+                table.draw();
+            });
+
+            var info = $('<div class="alphabetInfo"></div>')
+                .appendTo(alphabet);
+
+            alphabet
+                .on('mouseenter', 'span', function () {
+                    info
+                        .css({
+                            opacity: 1,
+                            left: $(this).position().left,
+                            width: $(this).width()
+                        })
+                        .html($(this).data('match-count'));
+                })
+                .on('mouseleave', 'span', function () {
+                    info.css('opacity', 0);
+                });
+        });
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,9 @@
+var mixedNumericArray = ['123,45', '123123,98', '12312,700', '124312, 1', '234, 200'];
+function compareNumbers(a, b) {
+  a= a.split(',');
+  b= b.split(',');
+  return Number(a[0]) - Number(b[0]);
+}
+console.log('mixedNumericArray:', mixedNumericArray.join());
+console.log('Sorted without a compare function:', mixedNumericArray.sort());
+console.log('Sorted with compareNumbers:', mixedNumericArray.sort(compareNumbers));

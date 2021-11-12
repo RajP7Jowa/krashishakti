@@ -1,0 +1,17 @@
+function sendEmails() {
+  var sheet = SpreadsheetApp.getActiveSheet();
+  var startRow = 2;  // First row of data to process
+  var numRows = 11;   // Number of rows to process
+  // Fetch the range of cells A2:C11
+  var dataRange = sheet.getRange(startRow, 1, numRows, 3)
+  // Fetch values for each row in the Range.
+  var data = dataRange.getValues();
+  for (i in data) {
+        var row = data[i];
+        var emailAddress = row[0];  // First column
+        var subject = row[1];           // Second column
+        var message = row[2];           // Third column;
+        MailApp.sendEmail(emailAddress, subject, message);
+  }
+}
+

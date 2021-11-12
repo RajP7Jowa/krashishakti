@@ -1,0 +1,141 @@
+$string = "beautiful";
+
+$time = "winter";
+
+
+$str = 'This is a $string $time morning!';
+
+echo $str. "<br>";
+
+
+eval("\$str = \"$str\";");
+
+echo $str;
+
+
+
+
+The code will be executed in the scope of the code calling eval(). Thus any variables defined or changed in the eval() call will remain visible after it terminates.
+
+
+
+
+
+
+host configuration
+
+
+
+/etc/apache2/sites-available/
+
+a2ensite = ""
+
+*****************************************
+
+<VirtualHost *:80>
+ServerAdmin webmaster@localhost DocumentRoot /var/www/html/GIT/bonfire_ui_draft/app
+ServerAlias *.bonfire_ui_draft
+ServerName app.bonfire.com</VirtualHost># vim: syntax=apache ts=4 sw=4 sts=4 sr noet****************************/etc/hosts--------------------------------
+127.0.0.1       localhost
+127.0.1.1       REAK-Rajkumar
+
+#edit
+127.0.0.1       app.bonfire.com
+
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+--------------------
+
+
+
+
+model code Phalcone
+
+/**Find previous and next records*/
+
+public static function findNext($id)
+
+{
+
+// A raw SQL statement
+
+$sql = "SELECT id FROM clients WHERE id = (SELECT min(id) FROM clients WHERE id > ".$id.")";
+
+
+// Base model
+
+$client = new Clients();
+
+
+// Execute the query
+
+$resultSet = new \Phalcon\Mvc\Model\Resultset\Simple(null, $client, $client->getReadConnection()->query($sql));
+
+
+if(count($resultSet)){
+
+return $resultSet;
+
+} else {
+
+return parent::find([
+
+"conditions" => "id = ?1",
+
+"bind" => [
+
+1 => $id
+
+]
+
+]);
+
+}
+
+}
+
+
+public static function findPrevious($id)
+
+{
+
+// A raw SQL statement
+
+$sql = "SELECT id FROM clients WHERE id = (SELECT max(id) FROM clients WHERE id < ".$id.")";
+
+
+// Base model
+
+$client = new Clients();
+
+
+// Execute the query
+
+$resultSet = new \Phalcon\Mvc\Model\Resultset\Simple(null, $client, $client->getReadConnection()->query($sql));
+
+
+if(count($resultSet)){
+
+return $resultSet;
+
+} else {
+
+return parent::find([
+
+"conditions" => "id = ?1",
+
+"bind" => [
+
+1 => $id
+
+]
+
+]);
+
+}
+
+}

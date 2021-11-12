@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Handson Table Example</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+</head>
+
+<body>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/7.1.1/handsontable.full.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/handsontable/7.1.1/handsontable.full.css">
+
+    <section style="height:82vh; position: relative;" class="shadow-lg p-3 bg-white rounded free-scroll1">
+        <div id="hot"></div>
+    </section>
+    <script>
+    </script>
+    <script>
+
+        function pipelineDelete(id) {
+            swal({
+                title: "",
+                text: "You are about to delete this pipeline.\n This action cannot be undone.\n Are you sure?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonClass: "btn-success",
+                cancelButtonClass: 'btn-danger',
+                confirmButtonText: "Yes",
+                cancelButtonText: "Cancel",
+                closeOnConfirm: true,
+                // closeOnCancel: false,
+                allowOutsideClick: true,
+            },
+                function (isConfirm) {
+                    if (isConfirm) {
+                       //do delete ajax
+                    }
+                });
+        }
+        function load(VALstage, VALstatus) {
+            var responseText = '[{"pipelineId":"2","id":"2","name":"aaa","open_date":"01\/11\/2019","stage":"aaa","est_value":"8888","est_close_date":"26\/09\/2019","status":"test-status-A1","client_id":"1","staffId":"1","pipeline":"test-pipeline-1","staffName":"reak user","company":"company1","contact":"contact1"},{"pipelineId":"4","id":"4","name":"","open_date":"05\/09\/2019","stage":"Rental started","est_value":"123","est_close_date":"24\/09\/2019","status":"test-status-A2","client_id":"1","staffId":"1","pipeline":"Sales Pipeline","staffName":"reak user","company":"company1","contact":"contact1"},{"pipelineId":"10","id":"10","name":"raj","open_date":"04\/09\/2019","stage":"Proposal to be sent","est_value":"5555","est_close_date":"24\/08\/2019","status":"","client_id":"1","staffId":"12","pipeline":"Commercial Pipeline","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"11","id":"11","name":"raj","open_date":"03\/08\/2019","stage":"","est_value":"80","est_close_date":"24\/08\/2019","status":"","client_id":"1","staffId":"12","pipeline":"Commercial Pipeline","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"16","id":"16","name":"one two","open_date":"09\/08\/2019","stage":"","est_value":"110","est_close_date":"24\/08\/2019","status":"","client_id":"1","staffId":"12","pipeline":"testreak","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"17","id":"17","name":"raj","open_date":"01\/08\/2019","stage":"","est_value":"10.4546546","est_close_date":"24\/08\/2019","status":"green","client_id":"1","staffId":"12","pipeline":"test-pipeline-2","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"18","id":"18","name":"raj","open_date":"02\/08\/2019","stage":"raj","est_value":"20","est_close_date":"24\/08\/2019","status":"green","client_id":"1","staffId":"12","pipeline":"","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"20","id":"20","name":"raj","open_date":"02\/08\/2019","stage":"","est_value":"30","est_close_date":"24\/08\/2019","status":"green","client_id":"1","staffId":"12","pipeline":"test123","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"21","id":"21","name":"raj","open_date":"02\/08\/2019","stage":"raj","est_value":"40","est_close_date":"24\/08\/2019","status":"green","client_id":"1","staffId":"12","pipeline":"","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"22","id":"22","name":"raj","open_date":"02\/08\/2019","stage":"raj","est_value":"50","est_close_date":"24\/08\/2019","status":"green","client_id":"1","staffId":"12","pipeline":null,"staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"23","id":"23","name":"raj","open_date":"02\/08\/2019","stage":"raj","est_value":"60","est_close_date":"24\/08\/2019","status":"green","client_id":"1","staffId":"12","pipeline":null,"staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"24","id":"24","name":"raj","open_date":"02\/08\/2019","stage":"Proposal to be sent","est_value":"70","est_close_date":"24\/08\/2019","status":"aa","client_id":"1","staffId":"12","pipeline":"Rental Pipeline","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"25","id":"25","name":"raj","open_date":"02\/08\/2019","stage":"Proposal to be sent","est_value":"80","est_close_date":"24\/08\/2019","status":"aa","client_id":"1","staffId":"12","pipeline":"Sales Pipeline","staffName":"aviral pathak","company":"company1","contact":"contact1"},{"pipelineId":"26","id":"26","name":"raj","open_date":"02\/08\/2019","stage":"raj","est_value":"90","est_close_date":"24\/08\/2019","status":"aa","client_id":"1","staffId":"12","pipeline":null,"staffName":"aviral pathak","company":"company1","contact":"contact1"}]';
+            // console.log(responseText);
+            var dataObject = JSON.parse(responseText);
+            // $('#totalContactInfo').html(dataObject.length);
+            function coverRenderer(instance, td, row, col, prop, value, cellProperties) {
+                var escaped = Handsontable.helper.stringify(value);
+                td.innerHTML = '<input type="hidden" value="' + value + '" id="hddn' + row + '"><div class="handson-checkbox"><input type="checkbox" id="chk' + row + '" class="handsonTableAction c_' + value + '" value="' + row + '"></div>';
+                return td;
+            }
+            function coverVisitRecords(instance, td, row, col, prop, value, cellProperties) {
+                var escaped = Handsontable.helper.stringify(value);
+                td.innerHTML = '<a class="handson-link" href="users/edit?id=' + instance.getDataAtCell(row, 1) + '&tab=pipeline" title="View records" >' + value + '</a>';
+                return td;
+            }
+
+            var globalColumns = [
+                '',
+                'client_id',
+                'Contact',
+                'Company',
+                'Name',
+                'Open Date',
+                'Stage',
+                'Est. Value',
+                'Est. Close Date',
+                'Status',
+                'Staff Name'
+            ];
+            var hotElement = document.querySelector('#hot');
+            var hotElementContainer = hotElement.parentNode;
+            var hotSettings = {
+
+                licenseKey: 'non-commercial-and-evaluation',
+                data: dataObject,
+                columns: [{
+                    data: 'pipelineId',
+                    type: 'numeric',
+                    renderer: coverRenderer,
+                    editor: false,
+                    width: 25, wordWrap: false,
+                }, {
+                    data: 'client_id',
+                    type: 'numeric',
+                    editor: false, wordWrap: false
+                }, {
+                    data: 'contact',
+                    type: 'text',
+                    editor: false,
+                    renderer: coverVisitRecords, wordWrap: false
+                }, {
+                    data: 'company',
+                    type: 'text',
+                    editor: false,
+                    wordWrap: false
+                }, {
+                    data: 'name',
+                    type: 'text', wordWrap: false
+                }, {
+                    data: 'open_date',
+                    type: 'date',
+                    dateFormat: 'DD/MM/YYYY', wordWrap: false
+                }, {
+                    data: 'stage',
+                    type: 'text', wordWrap: false
+                }, {
+                    data: 'est_value',
+                    type: 'numeric',
+                    numericFormat: {
+                        pattern: '$00,00,0000.00'
+                    }, wordWrap: false
+                }, {
+                    data: 'est_close_date',
+                    type: 'date',
+                    dateFormat: 'DD/MM/YYYY', wordWrap: false
+                }, {
+                    data: 'status',
+                    type: 'text', wordWrap: false
+
+                }, {
+                    data: 'staffName',
+                    type: 'text',
+                    editor: false, wordWrap: false
+                }],
+                stretchH: 'all',
+                autoWrapRow: true,
+                manualRowResize: true,
+                manualColumnResize: true,
+                // rowHeaders: true,
+                colHeaders: globalColumns,
+                hiddenColumns: {
+                    columns: [1]
+                },
+                manualRowMove: true,
+                manualColumnMove: true,
+                contextMenu: true,
+                filters: true,
+                dropdownMenu: true,
+                autoColumnSize: {
+                    samplingRatio: 23
+                },
+                exportFile: true,
+                // data: Handsontable.helper.createSpreadsheetData(1000, 1000),
+                colWidths: 100,
+                width: '100%',
+                height: '76vh',
+                rowHeights: 23,
+                dropdownMenu: ['alignment', 'filter_by_condition', 'filter_action_bar'],
+                contextMenu: ['alignment', 'undo', 'redo'],
+                // renderAllRows: true,
+                currentHeaderClassName: 'ht_highlighted',
+                currentColClassName: 'ht_highlightedcol',
+                currentRowClassName: 'ht_highlightedrow',
+                columnSorting: true,
+                afterGetColHeader: function (col, th) {
+                    if (col === 0) {
+                        th.innerHTML = $(th).find('.colHeader').html()
+                    }
+                },
+                beforeColumnSort: function (currentSortConfig, destinationSortConfigs) {
+                    if (currentSortConfig.length > 0 && destinationSortConfigs.length === 0) {
+                        const columnSortPlugin = this.getPlugin('columnSorting');
+                        const firstColumnConfig = currentSortConfig[0];
+                        firstColumnConfig.sortOrder = 'asc';
+                        columnSortPlugin.sort(firstColumnConfig);
+                        return false;
+                    }
+                },
+            };
+            var hot = new Handsontable(hotElement, hotSettings);
+            Handsontable.hooks.add('afterChange', callBack);
+
+
+            /*Update records script*/
+            function callBack(data) {
+                if (data != null) {
+                    let rowId = data[0][0];
+                    let id = (hot.getSourceDataAtRow(rowId).id);
+                    let col = data[0][1];
+                    let newVal = data[0][3];
+                    console.log("UPDATE table SET " + col + " = " + newVal + " WHERE id = " + id);
+                    /*Call ajax function for update on db*/
+             
+                }
+            }
+  
+
+   
+        }
+        load();
+        
+    </script>
+
+</body>
+
+</html>
