@@ -2590,3 +2590,34 @@ obj = Sec()
 obj.main()
 
 
+==========================Couch db==================================
+import couchdb
+import env_file
+import os
+couch = couchdb.Server(os.getenv('DB_URL'))
+try:
+    hotel_base_price_db = couch['hotel_base_prices']
+except couchdb.http.ResourceNotFound:
+    logging.error("hotel_base_scores database not found")
+
+
+def getBasePriceFromDB(self, hotel_name):
+        db = self.hotel_base_price_db
+        query = {
+            "selector": {
+                "_id": {
+                    "$gt": None
+                },
+                "hotel": hotel_name
+            }
+        }
+        base_price = 0
+        try:
+            for row in db.find(query):
+                base_price = row['base_price']
+        except Exception as e:
+            logging.error("Error while retrieving base_price from DB {}",str(e))
+            base_price = 0
+        return base_price
+	
+==========================Couch db==================================
