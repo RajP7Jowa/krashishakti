@@ -1,3 +1,18 @@
+Golang slice remove element from array 
+----------------------------------------
+package main
+import "fmt"
+func remove(s []interface{}, i int) []interface{} {
+	return append(s[:i], s[i+1:]...)
+}
+
+func main() {
+	names := []interface{}{"first", "second", "third", "four"}
+	fmt.Println(names)
+	cc := remove(names, 3)
+	fmt.Println(cc)
+}
+
 #################phalcon###############
 
 <?php
